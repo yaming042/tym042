@@ -1,0 +1,10 @@
+/node_modules/
+/.idea/
+package-lock.json
+
+#for macOS
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+

@@ -1,0 +1,93 @@
+.resume{
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto 40px;
+  
+  &>h2{
+    position: relative;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    height: 60px;
+    line-height: 60px;
+    margin-bottom: 20px;
+
+    span{
+      display: inline-block;
+      width: 200px;
+      background: #f9f9f9;
+      position: relative;
+      z-index: 2;
+    }
+
+    &:after{
+      content: '';
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: #ececec;
+      left: 0;
+      top: 50%;
+      margin-top: -1px;
+    }
+  }
+
+  .resume-list{
+    display: flex;
+    width: 800px;
+    margin: 0 auto;
+
+    .resume-list-item{
+      width: 240px;
+      margin: 0 20px;
+      text-align: center;
+      position: relative;
+      cursor: pointer;
+      font-size: 14px;
+      //background: #bbb;
+
+      .resume-img{
+        overflow: hidden;
+        width: 100%;
+        height: 160px;
+
+        img{
+          width: 100%;
+          height: 100%;
+          transition: all .35s;
+          opacity: 0.8;
+        }
+      }
+
+      &:nth-of-type(2){
+        margin: 0;
+      }
+
+      &:hover .resume-img img{
+        opacity: 1;
+      }
+
+      .resume-icon{
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        display: inline-block;
+        width: 0;
+        border-width: 32px;
+        border-style: solid;
+        border-color: rgba(57, 195, 103, .8) transparent transparent rgba(57, 195, 103, .8);
+
+        i.iconfont{
+          position: absolute;
+          top: -20px;
+          left: -20px;
+          color: yellow;
+        }
+      }
+    }
+
+  }
+}
