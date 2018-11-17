@@ -6,6 +6,10 @@ import Block1 from './block/block_1';
 import Block2 from './block/block_2';
 import Block3 from './block/block_3';
 import Sidebar1 from './sidebar/sidebar_1';
+import Sidebar2 from './sidebar/sidebar_2';
+import Sidebar3 from './sidebar/sidebar_3';
+import Sidebar4 from './sidebar/sidebar_4';
+import Sidebar5 from './sidebar/sidebar_5';
 
 export default class Home extends React.Component{
     constructor(props){
@@ -26,6 +30,10 @@ export default class Home extends React.Component{
                     </div>
                     <div className="web-home-sidebar">
                         <Sidebar1 />
+                        <Sidebar2 />
+                        <Sidebar3 />
+                        <Sidebar4 />
+                        <Sidebar5 />
                     </div>
                 </div>
             </div>
