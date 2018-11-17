@@ -17,10 +17,8 @@ ReactDOM.render(
             <Router history={ history }>
                 <Base>
                     <Switch>
-                        <Route exact path={`/`} render={() => (
-                            <Redirect to={`/app`}/>
-                        )}/>
-                        <Route exact path={`/app`} component={ Home }/>
+                        <Route exact path={`/`} component={ Home }/>
+                        <Route exact path={`/index`} component={ Home }/>
                     </Switch>
                 </Base>
             </Router>
