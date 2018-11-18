@@ -332,6 +332,25 @@
             }
           }
 
+          .visitor-count{
+            height: 300px;
+            width: 100%;
+            padding: 10px;
+
+            #visitor_svg{
+              width: 100%;
+              height: 100%;
+
+              .axis line,.axis path{fill:none;stroke:#000;shape-rendering:crispEdges}
+              .axis text{font-size:11px;fill:none}
+              .inner_line{stroke: #dedede;stroke-width:1px;fill:none;}
+              .visitortitle{stroke: #000;stroke-width:1px;fill:none;font-size: 12px;}
+              .focusLine{fill: none;stroke: green;stroke-width: 0.5px;}
+              .overrect{fill: none;stroke: none;pointer-events: all;}
+              .focusTxt{font-size: 12px;font-style: italic;stroke: green;}
+            }
+          }
+
           .contact-us{
             padding: 10px;
             font-size: 14px;
