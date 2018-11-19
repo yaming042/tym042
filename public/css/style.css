@@ -407,6 +407,65 @@ sub {
   align-items: center;
   padding: 0 10px; }
 
+.web-articles {
+  position: relative; }
+  .web-articles .articles-page-banner {
+    position: relative; }
+  .web-articles .articles-content {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding-top: 25px; }
+    .web-articles .articles-content .articles-body {
+      width: 801px;
+      margin-right: 39px;
+      padding-right: 40px;
+      border-right: 1px solid #eee; }
+      .web-articles .articles-content .articles-body .articles-list {
+        position: relative; }
+        .web-articles .articles-content .articles-body .articles-list .articles-item {
+          margin-bottom: 40px; }
+          .web-articles .articles-content .articles-body .articles-list .articles-item .title {
+            margin-bottom: 8px;
+            font-size: 18px;
+            line-height: 24px;
+            color: #3d3d3d;
+            font-weight: bold; }
+          .web-articles .articles-content .articles-body .articles-list .articles-item .content {
+            font-size: 14px;
+            line-height: 22px;
+            white-space: normal;
+            color: #999;
+            text-indent: 2em; }
+          .web-articles .articles-content .articles-body .articles-list .articles-item .articles-info {
+            padding-top: 8px;
+            font-size: 14px;
+            color: #6b6b6b; }
+            .web-articles .articles-content .articles-body .articles-list .articles-item .articles-info > span {
+              margin: 0 15px 0 0; }
+    .web-articles .articles-content .articles-sidebar {
+      width: 360px; }
+
+.articles-options {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee; }
+  .articles-options .articles-navgation {
+    width: 300px; }
+    .articles-options .articles-navgation i.iconfont {
+      margin: 0 10px;
+      font-size: 14px; }
+  .articles-options .articles-action {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end; }
+    .articles-options .articles-action > div {
+      margin: 0 10px; }
+
 .resume {
   position: relative;
   width: 100%;
