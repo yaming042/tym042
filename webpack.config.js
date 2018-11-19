@@ -1,6 +1,10 @@
+const webpack = require('webpack');
 const path = require('path');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
+    mode: 'development',
+
     entry: {
         web: ['./web/index.js'],
         editor: ['./editor/index.js']
@@ -22,6 +26,7 @@ module.exports = {
             },
             {
                 test: /\.js$/,
+                exclude: /node_modules/,
                 use: [
                     {
                         loader: 'babel-loader',
@@ -33,6 +38,23 @@ module.exports = {
             },
 
         ],
+    },
+
+    optimization: {
+        minimizer: [
+            new UglifyJSPlugin({
+                uglifyOptions: {
+                    output: {
+                        comments: false
+                    },
+                    compress: {
+                        warnings: false,
+                        drop_debugger: true,
+                        drop_console: true
+                    }
+                }
+            }),
+        ]
     },
 
     devServer: {
