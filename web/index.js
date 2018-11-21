@@ -26,7 +26,7 @@ ReactDOM.render(
                         <Route exact path={`/notes`} component={ Notes }/>
 
                         <Route exact path={`/:type/:id?`} render={ (props) => {
-                            let type = props.match.params.type || 'blog';
+                            let type = props.match.params.type;
                             let id = props.match.params.id || '';
 
                             if(type == 'blog' || type == 'webcode'){

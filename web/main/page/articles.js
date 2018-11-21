@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Pagination from '../components/pagination';
+
 export default class Blogs extends React.Component{
     constructor(props){
         super(props);
@@ -11,8 +13,6 @@ export default class Blogs extends React.Component{
                 <div className="articles-page-banner">
                     <img src="http://demo.cssmoban.com/cssthemes5/ccps_21_bpr/images/banner_top.jpg" alt=""/>
                 </div>
-
-                { this.props.match.params.type }
 
                 <div className="articles-content">
                     <div className="articles-body">
@@ -39,7 +39,7 @@ export default class Blogs extends React.Component{
                                     没想到复杂性本身就是一个难点，于是找来了一本关于复杂性的书，希望从中能够对复杂性有一些进一步的认识。
                                     （来自百度百科） 复杂性是当代科学的一个前沿和热点，具有跨学科综合性的趋势。不幸的是，复杂系统理论仍</p>
                                 <div className="articles-info">
-                                    <span>2018-08-29 07:00:00</span>
+                                    <span>发布时间: 2018-08-29 07:00:00</span>
                                     <span>阅读量: 999</span>
                                 </div>
                             </div>
@@ -49,10 +49,17 @@ export default class Blogs extends React.Component{
                                     没想到复杂性本身就是一个难点，于是找来了一本关于复杂性的书，希望从中能够对复杂性有一些进一步的认识。
                                     （来自百度百科） 复杂性是当代科学的一个前沿和热点，具有跨学科综合性的趋势。不幸的是，复杂系统理论仍</p>
                                 <div className="articles-info">
-                                    <span>2018-08-29 07:00:00</span>
+                                    <span>发布时间: 2018-08-29 07:00:00</span>
                                     <span>阅读量: 999</span>
                                 </div>
                             </div>
+                        </div>
+
+                        <div>
+                            <Pagination
+                                curPage={ 1 }
+                                total={ 8 }
+                            />
                         </div>
                     </div>
                     <div className="articles-sidebar">
