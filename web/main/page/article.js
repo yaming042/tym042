@@ -8,7 +8,8 @@ export default class Article extends React.Component{
     render(){
         return (
             <div>
-                articles
+                <p>{ this.props.match.params.type }</p>
+                <p>{ this.props.match.params.id }</p>
             </div>
         );
     }

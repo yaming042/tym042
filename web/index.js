@@ -11,8 +11,7 @@ import history from './libs/history';
 import Base from './base';
 import Home from './main/home';
 import Article from './main/page/article';
-import Blogs from './main/page/blogs';
-import Webcodes from './main/page/webcodes';
+import Articles from './main/page/articles';
 import Notes from './main/page/notes';
 
 ReactDOM.render(
@@ -23,20 +22,27 @@ ReactDOM.render(
                     <Switch>
                         <Route exact path={`/`} component={ Home }/>
                         <Route exact path={`/index`} component={ Home }/>
+                        <Route exact path={`/articles/:type`} component={ Articles }/>
                         <Route exact path={`/notes`} component={ Notes }/>
 
                         <Route exact path={`/:type/:id?`} render={ (props) => {
                             let type = props.match.params.type || 'blog';
                             let id = props.match.params.id || '';
 
-                            if(type == 'blog'){
-                                return (!id ? <Blogs /> : <Article />);
-                            }else if(type == 'webcode'){
-                                return (!id ? <Webcodes /> : <Article />);
-                            }else{
+                            if(type == 'blog' || type == 'webcode'){
+                                if(id){
+                                    return <Article match={ props.match } />;
+                                }else{
+                                    return <Redirect to={`/articles/${type}`}/>
+                                }
+                            }else if(type == 'notes'){
                                 return <Redirect to={`/notes`}/>
+                            }else{
+                                return <Redirect to={`/`}/>
                             }
                         }}/>
+
+                        <Route component={ Home }/>
                     </Switch>
                 </Base>
             </Router>
