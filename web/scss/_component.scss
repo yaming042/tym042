@@ -47,12 +47,27 @@
       border-right: 1px solid #e2e2e2;
       transition: all .25s;
 
+      &.ellipsis{
+        background: none;
+      }
       &:last-child{
         border: none;
       }
 
       &:hover{
         box-shadow: #4a4a4a 0px 1px 3px -2px;
+        background: rgba(220, 220, 220, 0.6);
+      }
+      &.ellipsis:hover{
+        box-shadow: none;
+        background: none;
+        cursor: default;
+      }
+
+      &.active-page{
+        box-shadow: #2962f6 0px 1px 3px -2px;
+        background: #f3c54e;
+        color: #fff;
       }
     }
   }

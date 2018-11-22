@@ -58,7 +58,7 @@ export default class Blogs extends React.Component{
                         <div>
                             <Pagination
                                 curPage={ 1 }
-                                total={ 8 }
+                                total={ 15 }
                             />
                         </div>
                     </div>
