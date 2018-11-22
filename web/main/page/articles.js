@@ -5,11 +5,16 @@ import Pagination from '../components/pagination';
 export default class Blogs extends React.Component{
     constructor(props){
         super(props);
+        this.state = {
+            openFilter: false,
+        };
     }
 
     render(){
+        let type = this.props.match.params.type;
+        let articleClass = type ? (type == 'blog' ? 'web-articles-blog' : 'web-articles-code') : 'web-articles-list';
         return (
-            <div className="web-articles ">
+            <div className={`web-articles ${ articleClass }`}>
                 <div className="articles-page-banner">
                     <img src="http://demo.cssmoban.com/cssthemes5/ccps_21_bpr/images/banner_top.jpg" alt=""/>
                 </div>
@@ -24,12 +29,17 @@ export default class Blogs extends React.Component{
                                 <span>热点</span>
                             </div>
 
-                            <div className="articles-action">
-                                <div className="sort">排序：</div>
-                                <div>默认</div>
-                                <div>按更新时间</div>
-                                <div>按访问量</div>
-                            </div>
+                            {
+                                this.state.openFilter ?
+                                    <div className="articles-action">
+                                        <div className="sort">排序：</div>
+                                        <div>默认</div>
+                                        <div>按更新时间</div>
+                                        <div>按访问量</div>
+                                    </div>
+                                :
+                                    null
+                            }
                         </div>
 
                         <div className="articles-list">

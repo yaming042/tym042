@@ -120,6 +120,8 @@ sub {
           .web-container .web-header .web-menu .menu-list .menu-item:hover > span {
             opacity: 1;
             top: 100%; }
+    .web-container .web-header.article-header {
+      background: #fff; }
   .web-container .web-home .web-banner {
     height: 200px;
     background: url("http://demo.cssmoban.com/cssthemes5/ccps_21_bpr/images/banner_top.jpg") no-repeat center;
@@ -362,7 +364,7 @@ sub {
   .web-container .web-footer {
     text-align: center;
     color: #838383;
-    margin: 25px auto 0;
+    margin: 0 auto;
     padding: 25px 0;
     border-top: 1px solid #efefef;
     background: #f1f1f1; }
@@ -466,6 +468,50 @@ sub {
     .articles-options .articles-action > div {
       margin: 0 10px; }
 
+.web-article {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  margin: 25px auto; }
+  .web-article .web-article-container {
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    display: flex; }
+    .web-article .web-article-container .web-article-view {
+      position: relative;
+      width: 700px;
+      max-width: 100%;
+      background-color: #fff;
+      border-radius: 2px;
+      font-size: 14px;
+      padding: 20px; }
+      .web-article .web-article-container .web-article-view .article-baseinfo {
+        margin-bottom: 12px; }
+        .web-article .web-article-container .web-article-view .article-baseinfo h2 {
+          font-weight: bold;
+          font-size: 20px;
+          margin-bottom: 6px; }
+        .web-article .web-article-container .web-article-view .article-baseinfo .other-info {
+          display: flex;
+          align-items: center;
+          color: #909090;
+          font-size: 12px; }
+          .web-article .web-article-container .web-article-view .article-baseinfo .other-info span {
+            margin-right: 15px; }
+    .web-article .web-article-container .web-article-sidebar {
+      width: 220px;
+      margin-left: 40px; }
+  .web-article .article-comments {
+    width: 700px;
+    min-height: 100px;
+    background: #fff;
+    margin: 20px 0;
+    border-radius: 2px;
+    font-size: 14px; }
+    .web-article .article-comments .comments {
+      padding: 20px; }
+
 .resume {
   position: relative;
   width: 100%;
@@ -540,7 +586,8 @@ sub {
   width: 100%;
   height: 32px;
   display: flex;
-  align-items: center; }
+  align-items: center;
+  justify-content: center; }
   .pagination-component > div {
     background: #f1f1f1; }
   .pagination-component .total-page {

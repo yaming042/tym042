@@ -12,6 +12,7 @@ import Base from './base';
 import Home from './main/home';
 import Article from './main/page/article';
 import Articles from './main/page/articles';
+import ArticleList from './';
 import Notes from './main/page/notes';
 
 ReactDOM.render(
@@ -22,7 +23,7 @@ ReactDOM.render(
                     <Switch>
                         <Route exact path={`/`} component={ Home }/>
                         <Route exact path={`/index`} component={ Home }/>
-                        <Route exact path={`/articles/:type`} component={ Articles }/>
+                        <Route exact path={`/articles/:type?`} component={ Articles }/>
                         <Route exact path={`/notes`} component={ Notes }/>
 
                         <Route exact path={`/:type/:id?`} render={ (props) => {

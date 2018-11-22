@@ -68,7 +68,16 @@
         }
       }
     }
+
+    &.article-header{
+      background: #fff;
+    }
   }
+
+  .main-content{
+
+  }
+
   .web-home{
     .web-banner{
       height: 200px;
@@ -400,7 +409,7 @@
   .web-footer{
     text-align: center;
     color: #838383;
-    margin: 25px auto 0;
+    margin: 0 auto;
     padding: 25px 0;
     border-top: 1px solid #efefef;
     background: #f1f1f1;
