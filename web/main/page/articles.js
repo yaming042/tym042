@@ -1,13 +1,29 @@
 import React from 'react';
 
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import * as Actions from '../../actions';
+
+import _ from 'underscore';
+
 import Pagination from '../components/pagination';
 
-export default class Blogs extends React.Component{
+class Articles extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             openFilter: false,
         };
+    }
+
+    componentWillMount(){
+
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(!_.isEqual(nextProps.match.params, this.props.match.params)){
+            console.log('执行更新操作！');
+        }
     }
 
     render(){
@@ -80,3 +96,18 @@ export default class Blogs extends React.Component{
         );
     }
 }
+
+
+
+//将state.counter绑定到props的counter
+function mapStateToProps(state) {
+    return state;
+}
+//将action的所有方法绑定到props上
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(Actions, dispatch)
+}
+
+//通过react-redux提供的connect方法将我们需要的state中的数据和actions中的方法绑定到props上
+
+export default connect(mapStateToProps, mapDispatchToProps)(Articles);
