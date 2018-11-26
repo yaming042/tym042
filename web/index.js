@@ -12,7 +12,6 @@ import Base from './base';
 import Home from './main/home';
 import Article from './main/page/article';
 import Articles from './main/page/articles';
-import ArticleList from './';
 import Notes from './main/page/notes';
 
 ReactDOM.render(

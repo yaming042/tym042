@@ -1,10 +1,14 @@
 import React from 'react';
 
 import Btitle from '../components/b_title';
+import Comment from '../components/comment';
 
 export default class Article extends React.Component{
     constructor(props){
         super(props);
+        this.state = {
+            id: props.match.params.id,
+        };
     }
 
     render(){
@@ -35,7 +39,9 @@ export default class Article extends React.Component{
                         label="评论"
                     />
                     <div className="comments">
-                        这里是评论区域
+                        <Comment
+                            aid={ this.state.id }
+                        />
                     </div>
                 </div>
             </div>
