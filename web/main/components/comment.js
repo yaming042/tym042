@@ -40,7 +40,7 @@ export default class Comments extends React.Component{
         let _this = this;
 
         $.ajax({
-            url: `http://47.94.97.168:8082/api/getComments?id=${id}`,
+            url: `${_DEV}/getComments?id=${id}`,
             type: 'GET',
             dataType: 'json',
             success: function(res){
@@ -119,7 +119,7 @@ export default class Comments extends React.Component{
         console.log(data);
 
         $.ajax({
-            url: 'http://47.94.97.168:8082/api/createComment',
+            url: `${_DEV}/createComment`,
             type: 'POST',
             data: data,
             dataType: 'json',
