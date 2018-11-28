@@ -1,5 +1,5 @@
 import React from 'react';
-import Snackbar from 'material-ui/Snackbar';
+import { message, Button } from 'antd';
 
 export default class Comments extends React.Component{
     constructor(props){
@@ -19,10 +19,7 @@ export default class Comments extends React.Component{
     }
 
     snackbarOpen(msg){
-        this.setState({
-            snackbar: true,
-            snackbarText: msg,
-        });
+        message.info(msg);
     }
     snackbarClose(){
         this.setState({
@@ -50,11 +47,11 @@ export default class Comments extends React.Component{
                         comments: res.data || [],
                     });
                 }else{
-                    this.snackbarOpen('获取评论列表失败，请稍后重试!'+res.msg);
+                    _this.snackbarOpen('获取评论列表失败，请稍后重试!'+res.msg);
                 }
             },
             error: function(){
-                this.snackbarOpen('获取评论列表失败，请稍后重试');
+                _this.snackbarOpen('获取评论列表失败，请稍后重试');
             }
         });
     }
@@ -75,10 +72,10 @@ export default class Comments extends React.Component{
             comment = $("#comment").val();
 
             if(!comment.length){
-                this.snackbarOpen('请填写您的评论');
+                _this.snackbarOpen('请填写您的评论');
                 return;
             }else if(comment.length > 320){
-                this.snackbarOpen('评论应限制在 320 个字以内');
+                _this.snackbarOpen('评论应限制在 320 个字以内');
                 return;
             }
 
@@ -95,10 +92,10 @@ export default class Comments extends React.Component{
             comment = $("textarea[reply-id='"+id+"']").val();
 
             if(!comment.length){
-                this.snackbarOpen('请填写您的评论');
+                _this.snackbarOpen('请填写您的评论');
                 return;
             }else if(comment.length > 320){
-                this.snackbarOpen('评论应限制在 320 个字以内');
+                _this.snackbarOpen('评论应限制在 320 个字以内');
                 return;
             }
 
@@ -112,7 +109,7 @@ export default class Comments extends React.Component{
             };
             successMsg = '回复';
         }else{
-            this.snackbarOpen('参数错误');
+            _this.snackbarOpen('参数错误');
             return;
         }
 
@@ -344,13 +341,6 @@ export default class Comments extends React.Component{
                             null
                     }
                 </div>
-
-                <Snackbar
-                    open={ this.state.snackbar }
-                    message={ this.state.snackbarText }
-                    autoHideDuration={ 3000 }
-                    onRequestClose={this.snackbarClose.bind(this) }
-                />
             </div>
         );
     }

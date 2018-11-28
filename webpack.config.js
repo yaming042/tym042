@@ -7,7 +7,7 @@ module.exports = {
 
     entry: {
         web: ['./web/index.js'],
-        editor: ['./editor/index.js']
+        admin: ['./admin/index.js']
     },
 
     output: {
@@ -61,7 +61,7 @@ module.exports = {
         contentBase: '.', //网站的根目录为 根目录/dist，如果配置不对，会报Cannot GET /错误
         port: 9000, //端口改为9000
         historyApiFallback:{
-            index: 'views/index.html'
+            index: 'views/admin.html'
         }
     }
 };
