@@ -1,23 +1,59 @@
 import React from 'react';
-import { Icon } from 'antd';
+import ReactDOM from 'react-dom';
+import { Icon, Button } from 'antd';
 
-import history from '../../libs/history';
+import styles from '../../libs/styles';
 
-const IconFont = Icon.createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_923356_gicz0vz62b.js',
-});
+//iconfont图标
+import { IconFont } from '../components/IconFont';
 
 export default class Topbar extends React.Component{
     constructor(props){
         super(props);
+
+        this.state = {
+            userStatus: false,
+        };
     }
 
     componentDidMount(){
 
     }
 
-    handleRoute(url){
-        history.push(url);
+    toggleUser(event){
+        event.stopPropagation();
+        let _this = this;
+
+        function e(event){
+            event.stopPropagation();
+            let menu = ReactDOM.findDOMNode(_this.refs.user_menu);
+
+            console.log(!$(menu).is(event.target));
+            console.log($(menu).has(event.target).length);
+
+            if (!$(menu).is(event.target) && $(menu).has(event.target).length === 0) {
+                _this.setState({
+                    userStatus: false,
+                });
+            }
+
+            document.removeEventListener('click', e);
+        }
+
+        if(this.state.userStatus){
+            this.setState({
+                userStatus: false,
+            });
+
+            document.removeEventListener('click', e);
+        }else{
+            this.setState({
+                userStatus: true,
+            });
+
+            document.addEventListener('click', e);
+        }
+
     }
 
     render(){
@@ -27,11 +63,31 @@ export default class Topbar extends React.Component{
                     TYM042
                 </div>
                 <div className="option-box">
-                    <IconFont
-                        type="icon-wechat"
-                        style={{color:'#fff'}}
-                    />
+                    <Button
+                        shape="circle"
+                        style={ styles.topbarIcon }
+                        onClick={ this.toggleUser.bind(this) }
+                    >
+                        <IconFont
+                            type="icon-user"
+                            style={{color:'#333'}}
+                        />
+
+                        {
+                            this.state.userStatus ?
+                                <div className="menu-detail" ref="user_menu">
+                                    <div className="tips-box">
+                                        <div className="tips-item tips-head">Hello，tim</div>
+                                        <div className="tips-item" onClick={ ()=>{alert("退出登录")} }>退出登录</div>
+                                    </div>
+                                </div>
+                            :
+                                null
+                        }
+                    </Button>
                 </div>
+
+
             </div>
         );
     }
