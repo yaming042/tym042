@@ -28,21 +28,18 @@ export default class Topbar extends React.Component{
             event.stopPropagation();
             let menu = ReactDOM.findDOMNode(_this.refs.user_menu);
 
-            console.log(!$(menu).is(event.target));
-            console.log($(menu).has(event.target).length);
-
             if (!$(menu).is(event.target) && $(menu).has(event.target).length === 0) {
                 _this.setState({
                     userStatus: false,
                 });
-            }
 
-            document.removeEventListener('click', e);
+                document.removeEventListener('click', e);
+            }
         }
 
         if(this.state.userStatus){
             this.setState({
-                userStatus: false,
+                userStatus: true,
             });
 
             document.removeEventListener('click', e);
@@ -72,19 +69,18 @@ export default class Topbar extends React.Component{
                             type="icon-user"
                             style={{color:'#333'}}
                         />
-
-                        {
-                            this.state.userStatus ?
-                                <div className="menu-detail" ref="user_menu">
-                                    <div className="tips-box">
-                                        <div className="tips-item tips-head">Hello，tim</div>
-                                        <div className="tips-item" onClick={ ()=>{alert("退出登录")} }>退出登录</div>
-                                    </div>
-                                </div>
-                            :
-                                null
-                        }
                     </Button>
+                    {
+                        this.state.userStatus ?
+                            <div className="menu-detail" ref="user_menu">
+                                <div className="tips-box">
+                                    <div className="tips-item tips-head">Hello，tim</div>
+                                    <div className="tips-item" onClick={ ()=>{alert("退出登录")} }>退出登录</div>
+                                </div>
+                            </div>
+                            :
+                            null
+                    }
                 </div>
 
 

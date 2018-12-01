@@ -1,0 +1,70 @@
+.article-edit-box {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.article-edit-box .editor-topbar {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 4px 20px;
+  background: #f9f9f9;
+}
+.article-edit-box .editor-topbar .logo {
+  width: 200px;
+  font-size: 20px;
+}
+.article-edit-box .editor-topbar .options {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+.article-edit-box .editor-topbar .options > div {
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin: 0 5px;
+  font-size: 14px;
+}
+.article-edit-box .editor-topbar .options > div.draft:hover {
+  background: #eee;
+}
+.article-edit-box .editor-topbar .options > div.publish:hover {
+  background: #448AFF;
+  color: #fff;
+}
+.article-edit-box .editor-article-body {
+  position: absolute;
+  top: 60px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+}
+.article-edit-box .editor-article-body .editor-toolbar {
+  border-bottom: 1px solid #f9f9f9;
+}
+.article-edit-box .editor-article-body .article-editor {
+  position: absolute;
+  top: 32px;
+  bottom: 0;
+  left: 0;
+  right: 400px;
+  margin: auto;
+}
+.article-edit-box .editor-article-body .article-editor .placehold {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  color: #d4d1d1;
+}
+.article-edit-box .editor-article-body .article-editor #editor {
+  width: 100%;
+  height: 100%;
+}
+.article-edit-box .editor-article-body .editor-article-info {
+  width: 380px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}

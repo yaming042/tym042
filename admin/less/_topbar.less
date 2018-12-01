@@ -2,7 +2,7 @@
   width: 100%;
   height: 60px;
   min-width: 800px;
-  background: #4a4a4a;
+  background: rgba(0, 141, 255, 0.9);
   box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.5);
   position: relative;
   z-index: 100;
@@ -26,19 +26,12 @@
     justify-content: flex-end;
     flex-grow: 1;
     padding-right: 50px;
-
-    & > div{
-      float: left;
-      margin: 0 10px;
-      width: 36px;
-      height: 36px;
-      position: relative;
-    }
+    position: relative;
 
     .menu-detail{
       position: absolute;
       top: 40px;
-      right: 0;
+      right: 20px;
       width: 120px;
       color: #333;
       font-size: 12px;
@@ -53,7 +46,7 @@
       border-radius: 4px;
 
       .tips-box{
-        padding: 5px;
+        padding: 5px 0;
 
         .tips-item{
           height: 38px;

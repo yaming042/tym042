@@ -9,7 +9,9 @@ import store from './store';
 import history from './libs/history';
 
 import Base from './base';
-import Home from './main/home';
+import Articles from './main/page/articles';
+import Drafts from './main/page/drafts';
+import Article from './main/page/article';
 
 ReactDOM.render(
     <Provider store={ store }>
@@ -17,8 +19,14 @@ ReactDOM.render(
             <Router history={ history }>
                 <Base>
                     <Switch>
+                        <Route exact path={'/admin'} render={ ()=>{
+                            return <Redirect to={'/admin/articles'}/>;
+                        }}/>
+                        <Route exact path={'/admin/articles'} component={ Articles }/>
+                        <Route exact path={'/admin/drafts'} component={ Drafts }/>
+                        <Route exact path={'/admin/article/:id'} component={ Article }/>
 
-                        <Route component={ Home }/>
+                        <Route component={ Articles }/>
                     </Switch>
                 </Base>
             </Router>

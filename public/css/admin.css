@@ -12,7 +12,6 @@ body {
   height: 100%;
   font-family: sans-serif;
   -webkit-text-size-adjust: none;
-  background: #f9f9f9;
   color: #333;
 }
 html,
@@ -94,7 +93,8 @@ summary,
 time,
 mark,
 audio,
-video {
+video,
+hr {
   margin: 0;
   padding: 0;
   font: inherit;
@@ -164,11 +164,113 @@ sub {
 ::-webkit-scrollbar-thumb {
   background-color: #aaa;
 }
+.main-content {
+  position: absolute;
+  left: 200px;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  padding: 20px;
+  overflow: hidden;
+}
+.main-content .articles-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.main-content .list-box {
+  position: absolute;
+  overflow: hidden;
+  top: 32px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  font-size: 14px;
+}
+.main-content .list-box .list-head {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 50px;
+  border-bottom: 1px solid #efefef;
+  padding: 0 4px;
+}
+.main-content .list-box .list-head > div {
+  position: relative;
+}
+.main-content .list-box .list-head > div.col-a {
+  width: 20%;
+}
+.main-content .list-box .list-head > div.col-b {
+  width: 12%;
+}
+.main-content .list-box .list-head > div.col-c {
+  width: 12%;
+}
+.main-content .list-box .list-head > div.col-d {
+  width: 26%;
+}
+.main-content .list-box .list-head > div.col-e {
+  width: 20%;
+}
+.main-content .list-box .list-head > div.col-f {
+  width: 10%;
+  text-align: center;
+  padding-right: 4px;
+}
+.main-content .list-box .list-scroll-box {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50px;
+  bottom: 0;
+  margin: auto;
+  overflow: auto;
+}
+.main-content .list-box .list-scroll-box .list-body {
+  position: relative;
+  font-size: 12px;
+  color: #666;
+}
+.main-content .list-box .list-scroll-box .list-body .list-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #efefef;
+  height: 40px;
+  padding: 0 4px;
+}
+.main-content .list-box .list-scroll-box .list-body .list-item > div {
+  position: relative;
+}
+.main-content .list-box .list-scroll-box .list-body .list-item > div.col-a {
+  width: 20%;
+}
+.main-content .list-box .list-scroll-box .list-body .list-item > div.col-b {
+  width: 12%;
+}
+.main-content .list-box .list-scroll-box .list-body .list-item > div.col-c {
+  width: 12%;
+}
+.main-content .list-box .list-scroll-box .list-body .list-item > div.col-d {
+  width: 26%;
+}
+.main-content .list-box .list-scroll-box .list-body .list-item > div.col-e {
+  width: 20%;
+}
+.main-content .list-box .list-scroll-box .list-body .list-item > div.col-f {
+  width: 10%;
+  text-align: center;
+}
+.main-content .list-box .list-scroll-box .list-body .list-item:first-child {
+  border: none;
+}
 .topbar-box {
   width: 100%;
   height: 60px;
   min-width: 800px;
-  background: #4a4a4a;
+  background: rgba(0, 141, 255, 0.9);
   box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.5);
   position: relative;
   z-index: 100;
@@ -191,18 +293,12 @@ sub {
   justify-content: flex-end;
   flex-grow: 1;
   padding-right: 50px;
-}
-.topbar-box .option-box > div {
-  float: left;
-  margin: 0 10px;
-  width: 36px;
-  height: 36px;
   position: relative;
 }
 .topbar-box .option-box .menu-detail {
   position: absolute;
   top: 40px;
-  right: 0;
+  right: 20px;
   width: 120px;
   color: #333;
   font-size: 12px;
@@ -217,7 +313,7 @@ sub {
   border-radius: 4px;
 }
 .topbar-box .option-box .menu-detail .tips-box {
-  padding: 5px;
+  padding: 5px 0;
 }
 .topbar-box .option-box .menu-detail .tips-box .tips-item {
   height: 38px;
@@ -242,4 +338,134 @@ sub {
 }
 .topbar-box .option-box .menu-detail .tips-box .tips-item:last-child {
   border-bottom: none;
+}
+.navbar-box {
+  position: absolute;
+  left: 0;
+  top: 60px;
+  bottom: 0;
+  width: 200px;
+  overflow-y: auto;
+  background: #F5F5F5;
+  color: #ddd;
+  padding: 13px 0 21px;
+}
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background-color: #efefef;
+}
+.ant-drawer-body {
+  padding: 0 !important;
+  height: 100% !important;
+}
+.article-edit-box {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.article-edit-box .editor-topbar {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 4px 20px;
+  background: #f9f9f9;
+}
+.article-edit-box .editor-topbar .logo {
+  width: 200px;
+  font-size: 20px;
+}
+.article-edit-box .editor-topbar .options {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+.article-edit-box .editor-topbar .options > div {
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin: 0 5px;
+  font-size: 14px;
+}
+.article-edit-box .editor-topbar .options > div.draft:hover {
+  background: #eee;
+}
+.article-edit-box .editor-topbar .options > div.publish:hover {
+  background: #448AFF;
+  color: #fff;
+}
+.article-edit-box .editor-article-body {
+  position: absolute;
+  top: 60px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+}
+.article-edit-box .editor-article-body .editor-toolbar {
+  border-bottom: 1px solid #f9f9f9;
+}
+.article-edit-box .editor-article-body .article-editor {
+  position: absolute;
+  top: 32px;
+  bottom: 0;
+  left: 0;
+  right: 480px;
+  margin: auto;
+}
+.article-edit-box .editor-article-body .article-editor .placehold {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  color: #d4d1d1;
+}
+.article-edit-box .editor-article-body .article-editor #editor {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  border-right: 1px solid #f9f9f9;
+}
+.article-edit-box .editor-article-body .editor-article-info {
+  width: 480px;
+  position: absolute;
+  top: 32px;
+  right: 0;
+  bottom: 0;
+  padding: 10px 20px;
+  overflow-y: auto;
+}
+.article-edit-box .editor-article-body .editor-article-info .input-field {
+  display: flex;
+  align-items: center;
+}
+.article-edit-box .editor-article-body .editor-article-info .input-field > label {
+  display: inline-block;
+  width: 80px;
+  margin-right: 20px;
+  text-align: right;
+}
+.article-edit-box .editor-article-body .editor-article-info .input-field .input-box {
+  display: flex;
+  flex-grow: 1;
+}
+.article-edit-box .editor-article-body .editor-article-info .input-field .input-box .custom_input {
+  top: 5px;
+  width: 85%;
+}
+.article-edit-box .editor-article-body .editor-article-info .input-field .input-box .custom_input input::-webkit-input-placeholder {
+  color: #ccc;
+  font-size: 12px;
+}
+.article-edit-box .editor-article-body .editor-article-info .input-field .input-box .custom_input input:-moz-placeholder,
+.article-edit-box .editor-article-body .editor-article-info .input-field .input-box .custom_input input::-moz-placeholder,
+.article-edit-box .editor-article-body .editor-article-info .input-field .input-box .custom_input input:-ms-input-placeholder {
+  color: #ccc;
+}
+.article-edit-box .editor-article-body .editor-article-info .input-field .input-box.input-right-box {
+  min-height: 46px;
+  align-items: center;
+  padding-right: 15%;
+}
+.w-e-text {
+  min-height: 100% !important;
+  height: auto !important;
+  overflow: hidden !important;
 }

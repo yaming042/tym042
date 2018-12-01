@@ -1,97 +1,191 @@
 import React from 'react';
 
+import { Button, Menu, Dropdown, Modal } from 'antd';
+import { IconFont } from '../components/IconFont';
+
+import Article from './article';
+
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as Actions from '../../actions';
 
-import _ from 'underscore';
+import styles from '../../libs/styles';
+import history from '../../libs/history';
 
-import Pagination from '../components/pagination';
+const confirm = Modal.confirm;
 
 class Articles extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            openFilter: false,
+            articles: [],
+
+            drawerOpen: false,
         };
     }
 
-    componentWillMount(){
-
+    drawerOpen(){
+        this.setState({
+            drawerOpen: true,
+        });
     }
+    drawerClose(){
+        this.setState({
+            drawerOpen: false,
+        });
+    }
+    componentWillMount(){
+        //获取列表数据todo...
 
-    componentWillReceiveProps(nextProps){
-        if(!_.isEqual(nextProps.match.params, this.props.match.params)){
-            console.log('执行更新操作！');
-        }
+        this.setState({
+            articles: [
+                {
+                    id: '1',
+                    title: '测试测试标题1',
+                    category: [
+                        {catid: '1',catname:'分类1',slug:'category1'},
+                        {catid: '2',catname:'分类2',slug:'category2'},
+                        {catid: '3',catname:'分类3',slug:'category3'},
+                    ],
+                    tags: [
+                        {tagid: '1',tagname:'Tag1',slug:'tag1'},
+                        {tagid: '2',tagname:'Tag2',slug:'tag2'},
+                        {tagid: '3',tagname:'Tag3',slug:'tag3'},
+                    ],
+                    author: 'test1',
+                    updated_at: '2018-09-08 11:09:22',
+                },
+                {
+                    id: '2',
+                    title: '测试测试标题2',
+                    category: [
+                        {catid: '1',catname:'分类1',slug:'category1'},
+                        {catid: '2',catname:'分类2',slug:'category2'},
+                    ],
+                    tags: [
+                        {tagid: '1',tagname:'Tag1',slug:'tag1'},
+                        {tagid: '2',tagname:'Tag2',slug:'tag2'},
+                    ],
+                    author: 'test2',
+                    updated_at: '2018-09-08 11:09:22',
+                },
+                {
+                    id: '3',
+                    title: '测试测试标题3',
+                    category: [
+                        {catid: '2',catname:'分类2',slug:'category2'},
+                        {catid: '3',catname:'分类3',slug:'category3'},
+                    ],
+                    tags: [
+                        {tagid: '2',tagname:'Tag2',slug:'tag2'},
+                        {tagid: '3',tagname:'Tag3',slug:'tag3'},
+                    ],
+                    author: 'test3',
+                    updated_at: '2018-09-08 11:09:22',
+                },
+            ],
+        });
+    }
+    componentWillReceiveProps(nextProps){}
+
+    //创建新文章
+    createNewArticle(){
+        // history.push(`/admin/article/new`);
+    }
+    view(id){
+        console.log(id);
+        // history.push(`/admin/article/${id}`);
+
+        this.drawerOpen();
+    }
+    delete(id){
+        console.log(id);
+        confirm({
+            title: '确定要 删除 这篇文章吗？',
+            cancelText: '取消',
+            okText: '确定',
+            onOk() {
+                console.log('OK id: '+id);
+            },
+            onCancel() {
+                console.log('Cancel id: '+id);
+            },
+        });
     }
 
     render(){
-        let type = this.props.match.params.type;
-        let articleClass = type ? (type == 'blog' ? 'web-articles-blog' : 'web-articles-code') : 'web-articles-list';
+
         return (
-            <div className={`web-articles ${ articleClass }`}>
-                <div className="articles-page-banner">
-                    <img src="http://demo.cssmoban.com/cssthemes5/ccps_21_bpr/images/banner_top.jpg" alt=""/>
+            <div className="articles-box">
+                <div className="add-edit-option">
+                    <Button type="primary" onClick={ this.createNewArticle.bind(this) }>发布文章</Button>
                 </div>
 
-                <div className="articles-content">
-                    <div className="articles-body">
-
-                        <div className="articles-options">
-                            <div className="articles-navgation">
-                                <span>全部文章</span>
-                                <i className="iconfont icon-arrow-r"></i>
-                                <span>热点</span>
-                            </div>
+                <div className="list-box">
+                    <div className="list-head">
+                        <div className="col-a">标题</div>
+                        <div className="col-b">作者</div>
+                        <div className="col-c">分类</div>
+                        <div className="col-d">标签</div>
+                        <div className="col-e">日期</div>
+                        <div className="col-f">操作</div>
+                    </div>
+                    <div className="list-scroll-box">
+                        <div className="list-body">
 
                             {
-                                this.state.openFilter ?
-                                    <div className="articles-action">
-                                        <div className="sort">排序：</div>
-                                        <div>默认</div>
-                                        <div>按更新时间</div>
-                                        <div>按访问量</div>
-                                    </div>
-                                :
-                                    null
+                                this.state.articles.map((d, k) => {
+                                    let cats = '';
+                                    let tags = '';
+                                    d.category.map((c, ck) => {
+                                        cats += ','+c.catname;
+                                    });
+                                    d.tags.map((c, ck) => {
+                                        tags += ','+c.tagname;
+                                    });
+                                    return (
+                                        <div className="list-item" key={ d.id }>
+                                            <div className="col-a">{ d.title }</div>
+                                            <div className="col-b">{ d.author }</div>
+                                            <div className="col-c">{ cats.substr(1) }</div>
+                                            <div className="col-d">{ tags.substr(1) }</div>
+                                            <div className="col-e">{ d.updated_at }</div>
+                                            <div className="col-f">
+                                                <Dropdown
+                                                    trigger={['click']}
+                                                    overlay={
+                                                        <Menu>
+                                                            <Menu.Item key="edit" style={ styles.list.optionMenuItem } onClick={this.view.bind(this, d.id)}>
+                                                                <IconFont type="icon-edit"/>
+                                                                编辑
+                                                            </Menu.Item>
+                                                            <Menu.Item key="delete" style={ styles.list.optionMenuItem } onClick={this.delete.bind(this, d.id)}>
+                                                                <IconFont type="icon-delete"/>
+                                                                删除
+                                                            </Menu.Item>
+                                                        </Menu>
+                                                    }
+                                                >
+                                                    <Button shape="circle" style={ styles.list.optionBtn }>
+                                                        <IconFont type="icon-show-more" style={{fontSize:'16px'}}/>
+                                                    </Button>
+                                                </Dropdown>
+                                            </div>
+                                        </div>
+                                    );
+                                })
                             }
-                        </div>
 
-                        <div className="articles-list">
-                            <div className="articles-item">
-                                <h4 className="title">《复杂系统突现论》读后</h4>
-                                <p className="content">应石头兄弟之邀，想从复杂性的视角看一下从微服务到service mesh 的演进，
-                                    没想到复杂性本身就是一个难点，于是找来了一本关于复杂性的书，希望从中能够对复杂性有一些进一步的认识。
-                                    （来自百度百科） 复杂性是当代科学的一个前沿和热点，具有跨学科综合性的趋势。不幸的是，复杂系统理论仍</p>
-                                <div className="articles-info">
-                                    <span>发布时间: 2018-08-29 07:00:00</span>
-                                    <span>阅读量: 999</span>
-                                </div>
-                            </div>
-                            <div className="articles-item">
-                                <h4 className="title">《复杂系统突现论》读后</h4>
-                                <p className="content">应石头兄弟之邀，想从复杂性的视角看一下从微服务到service mesh 的演进，
-                                    没想到复杂性本身就是一个难点，于是找来了一本关于复杂性的书，希望从中能够对复杂性有一些进一步的认识。
-                                    （来自百度百科） 复杂性是当代科学的一个前沿和热点，具有跨学科综合性的趋势。不幸的是，复杂系统理论仍</p>
-                                <div className="articles-info">
-                                    <span>发布时间: 2018-08-29 07:00:00</span>
-                                    <span>阅读量: 999</span>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div>
-                            <Pagination
-                                curPage={ 1 }
-                                total={ 15 }
-                            />
                         </div>
                     </div>
-                    <div className="articles-sidebar">
-                        <div style={{height:'200px',background:'blue'}}></div>
-                    </div>
+
                 </div>
+
+                <Article
+                    open={ this.state.drawerOpen }
+                    handleClose={ this.drawerClose.bind(this) }
+                />
             </div>
         );
     }
