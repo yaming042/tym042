@@ -28,11 +28,12 @@ export default class UploadOne extends Component{
             uploader: null,
 
             showProgress: false,
-            showUpBtn: this.props.default ? (multi ? true : false) : true,
+            showUpBtn: this.props.default && this.props.default.length ? (multi ? true : false) : true,
 
             previewVisible: false,//是否打开图片预览
             previewImage: '',//预览图片的地址
         };
+
     }
 
     componentDidMount(){
@@ -41,22 +42,10 @@ export default class UploadOne extends Component{
             url: this.props.default ? (this.state.multi ? this.props.default : this.props.default.slice(0,1)) : [],
         });
         _this.initUpload();
-
-        $.ajax({
-            url:'http://localhost:8888/api/getComments?id=1',
-            type:'get',
-            dataType: 'json',
-            success: (res) => {
-                console.log(res);
-            },
-            error: () => {
-                console.log('err');
-            }
-        });
     }
     componentWillReceiveProps(nextProps){
         this.setState({
-            url: nextProps.default ? (nextProps.multi ? nextProps.default :nextProps.default.slice(0,1)) : [],
+            url: nextProps.default ? (nextProps.multi ? nextProps.default : nextProps.default.slice(0,1)) : [],
         });
     }
 
@@ -150,7 +139,6 @@ export default class UploadOne extends Component{
         });
     }
 
-    //snackbar打开
     messageOpen(msg){
         message.warning( msg );
     }
