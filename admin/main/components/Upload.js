@@ -111,6 +111,8 @@ export default class UploadOne extends Component{
                 },
                 UploadComplete: function(up, files){
                     let btnId = _this.state.id;
+                    let urls = _this.state.url.slice(0);
+
                     if(!_this.state.multi){
                         _this.setState({
                             showUpBtn: false,
@@ -122,6 +124,7 @@ export default class UploadOne extends Component{
                         $('#file-progress-'+btnId).css('width','0');//控制进度条恢复原始状态
                     });
 
+                    this.props.collect && this.props.collect(urls);
                 },
                 Error: function (up, err) {
                     if(err.code == -600){
@@ -175,6 +178,8 @@ export default class UploadOne extends Component{
             url: urls,
             showUpBtn: true,//移除图片就显示上传按钮，多选的话没影响，单选的话就可以显示了
         });
+
+        this.props.collect && this.props.collect(urls);
     }
 
     render(){

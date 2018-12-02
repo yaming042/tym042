@@ -23,6 +23,8 @@ class Article extends React.Component{
             open: props.open,
             type: '',
             editor: null,
+
+            thumbs: [],
         };
     }
 
@@ -122,6 +124,12 @@ class Article extends React.Component{
     }
     selectTag(v, e){
         console.log(v, e);
+    }
+
+    getThumb(data){
+        this.setState({
+            thumbs: data || [],
+        });
     }
 
     save(status){
@@ -247,7 +255,10 @@ class Article extends React.Component{
                                 <div className="input-field">
                                     <label>缩略图</label>
                                     <div className="input-box input-right-box">
-                                        <UploadFiles />
+                                        <UploadFiles
+                                            default={ this.state.thumbs }
+                                            collect={ this.getThumb.bind(this) }
+                                        />
                                     </div>
                                 </div>
                             </div>
