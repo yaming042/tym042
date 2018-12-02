@@ -49,15 +49,18 @@ export default class UploadFiles extends React.Component{
         return (
             <div className="clearfix">
                 <Upload
-                    action="//jsonplaceholder.typicode.com/posts/"
+                    // action="//jsonplaceholder.typicode.com/posts/"
                     listType="picture-card"
                     fileList={ fileList }
                     onPreview={ this.handlePreview.bind(this) }
                     onChange={ this.handleChange.bind(this) }
+                    multiple={ this.props.multiple ? true : false }
                 >
-                    { fileList.length >= 3 ? null : uploadButton}
+                    {
+                        this.props.multiple ? uploadButton : (!fileList.length ? uploadButton : null )
+                    }
                 </Upload>
-                <Modal visible={ previewVisible } footer={null} onCancel={this.handleCancel}>
+                <Modal visible={ previewVisible } footer={null} onCancel={this.handleCancel.bind(this)}>
                     <img alt="example" style={{ width: '100%' }} src={ previewImage } />
                 </Modal>
             </div>

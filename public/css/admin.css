@@ -435,6 +435,7 @@ sub {
 .article-edit-box .editor-article-body .editor-article-info .input-field {
   display: flex;
   align-items: center;
+  margin: 15px 0;
 }
 .article-edit-box .editor-article-body .editor-article-info .input-field > label {
   display: inline-block;
@@ -464,8 +465,114 @@ sub {
   align-items: center;
   padding-right: 15%;
 }
+.article-edit-box .editor-article-body .editor-article-info .upload-thumb-box .input-field {
+  align-items: flex-start;
+}
+.article-edit-box .editor-article-body .editor-article-info .upload-thumb-box .input-field .input-box.input-right-box {
+  padding-right: 0;
+}
+.article-edit-box .editor-article-body .editor-article-info .upload-thumb-box .input-field .input-box .file-upload-component .upload-preview {
+  position: relative;
+}
+.article-edit-box .editor-article-body .editor-article-info .upload-thumb-box .input-field .input-box .file-upload-component .upload-preview .preview-item {
+  width: 270px;
+  height: 167px;
+}
+.article-edit-box .editor-article-body .editor-article-info .upload-thumb-box .input-field .input-box .file-upload-component .upload-button-box {
+  width: 270px;
+  height: 167px;
+}
+.article-edit-box .editor-article-body .editor-article-info .upload-thumb-box .input-field .input-box .file-upload-component .upload-button-box .upload-progress {
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  z-index: 2;
+}
+.article-edit-box .editor-article-body .editor-article-info .upload-thumb-box .input-field .input-box .file-upload-component .upload-button-box .upload-progress span {
+  height: 12px;
+  display: block;
+}
+.article-edit-box .editor-article-body .editor-article-info .upload-thumb-box .input-field .input-box .file-upload-component .upload-button-box .upload-progress span:last-child {
+  background: #85d062;
+  width: 100px;
+}
 .w-e-text {
   min-height: 100% !important;
   height: auto !important;
   overflow: hidden !important;
+}
+.file-upload-component {
+  position: relative;
+}
+.file-upload-component .upload-preview {
+  float: left;
+  position: relative;
+  z-index: 99;
+}
+.file-upload-component .upload-preview .preview-item {
+  float: left;
+  width: 98px;
+  height: 62px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  margin: 0 10px 10px 0;
+  z-index: 1000;
+}
+.file-upload-component .upload-preview .preview-item img {
+  width: 100%;
+  height: 100%;
+}
+.file-upload-component .upload-preview .preview-item div.del-mask {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  cursor: pointer;
+  color: #000;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.15s;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  z-index: 3000;
+}
+.file-upload-component .upload-preview .preview-item div.del-mask span.iconfont {
+  font-size: 20px;
+  color: #ababab;
+  padding: 10px;
+}
+.file-upload-component .upload-preview .preview-item div.del-mask span.iconfont:hover {
+  color: #fff;
+}
+.file-upload-component .upload-preview .preview-item:hover div.del-mask {
+  opacity: 1;
+  transform: scale(1);
+}
+.file-upload-component .upload-button-box {
+  float: left;
+  cursor: pointer;
+  width: 98px;
+  height: 62px;
+  border-radius: 2px;
+  border: 1px solid #fefefe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.file-upload-component .upload-button-box .upload-button {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.file-upload-component .upload-button-box .upload-button span.iconfont {
+  color: #757575;
+  font-size: 28px;
 }

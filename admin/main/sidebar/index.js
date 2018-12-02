@@ -5,8 +5,6 @@ import { IconFont } from '../components/IconFont';
 import styles from '../../libs/styles';
 import history from '../../libs/history';
 
-console.log(styles);
-
 export default class Home extends React.Component{
     constructor(props){
         super(props);

@@ -29,6 +29,19 @@ const styles = {
         select: {
             width: '100%',
         },
+    },
+
+    modal: {
+        closeBtn: {
+            position: 'absolute',
+            right: '4px',
+            top: '4px',
+            width: '24px',
+            height: '24px',
+            textAlign: 'center',
+            lineHeight: '26px',
+            cursor: 'pointer',
+        }
     }
 };
 

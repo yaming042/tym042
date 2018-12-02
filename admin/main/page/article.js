@@ -4,6 +4,7 @@ import { Drawer, Form, Button, Col, Row, Input, Select, Divider, Radio } from 'a
 const { Option } = Select;
 
 import TextField from '../components/InputField';
+import UploadFiles from '../components/Upload';
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -23,8 +24,6 @@ class Article extends React.Component{
             type: '',
             editor: null,
         };
-
-        console.log(props.id);
     }
 
     drawerOpen(){
@@ -229,10 +228,11 @@ class Article extends React.Component{
                                 <label>文章标签</label>
                                 <div className="input-box input-right-box">
                                     <Select
-                                        defaultValue={''}
+                                        defaultValue={[]}
                                         style={ styles.form.select }
-                                        mode="tags"
-                                        maxTagCount={3}
+                                        mode="multiple"
+                                        maxTagCount={6}
+                                        allowClear={true}
                                         onChange={ this.selectTag.bind(this) }
                                     >
                                         <Option value="1">Tag 1</Option>
@@ -243,7 +243,14 @@ class Article extends React.Component{
                                 </div>
                             </div>
                             <Divider />
-                            <div>上传图片</div>
+                            <div className="upload-thumb-box">
+                                <div className="input-field">
+                                    <label>缩略图</label>
+                                    <div className="input-box input-right-box">
+                                        <UploadFiles />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
