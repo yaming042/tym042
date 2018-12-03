@@ -47,23 +47,23 @@ export default class Home extends React.Component{
                 //     icon: <IconFont type="icon-comment-manage"/>,
                 //     label: '评论管理',
                 // },
-                {
-                    path: 'admin/comment',
-                    icon: <IconFont type="icon-comment-manage"/>,
-                    label: '评论管理',
-                    children: [
-                        {
-                            path: 'admin/comments',
-                            icon: <IconFont type="icon-comment-manage"/>,
-                            label: '所有评论',
-                        },
-                        {
-                            path: 'admin/badcomments',
-                            icon: <IconFont type="icon-comment-manage"/>,
-                            label: '被举报评论',
-                        },
-                    ],
-                }
+                // {
+                //     path: 'admin/comment',
+                //     icon: <IconFont type="icon-comment-manage"/>,
+                //     label: '评论管理',
+                //     children: [
+                //         {
+                //             path: 'admin/comments',
+                //             icon: <IconFont type="icon-comment-manage"/>,
+                //             label: '所有评论',
+                //         },
+                //         {
+                //             path: 'admin/badcomments',
+                //             icon: <IconFont type="icon-comment-manage"/>,
+                //             label: '被举报评论',
+                //         },
+                //     ],
+                // }
             ],
             defaultMenu: [],
         };
@@ -115,19 +115,32 @@ export default class Home extends React.Component{
         let nodes = menus.map((md, mk) => {
 
             return (
-                <SubMenu key={ md.path } title={`${md.icon}${md.label}`}>
-                    <Menu.Item key={ md.path } style={ styles.menu.menuItem }>{md.icon}{md.label}</Menu.Item>
-                    {
-                        md.children && md.children.length ?
-                            this.renderSubMenu(md.children)
-                        :
-                            null
-                    }
-                </SubMenu>
+                <React.Fragment key={mk}>
+                    <SubMenu key={ md.path } title={`${md.icon}${md.label}`}>
+                        <Menu.Item key={ md.path } style={ styles.menu.menuItem }>{md.icon}{md.label}</Menu.Item>
+                        {
+                            md.children && md.children.length ?
+                                this.renderSubMenu(md.children)
+                            :
+                                null
+                        }
+                    </SubMenu>
+                </React.Fragment>
             );
         });
 
         return nodes;
+    }
+    renderTest(){
+        let node = this.state.menu.map((d, k) => {
+            return (
+                <React.Fragment key={k}>
+                    <Menu.Item key={d.path} style={ styles.menu.menuItem }><IconFont type="icon-article-manage"/>文章管理</Menu.Item>
+                </React.Fragment>
+            );
+        });
+
+        return node;
     }
 
     render(){
@@ -147,8 +160,8 @@ export default class Home extends React.Component{
                     <Menu.Item key="admin/tags" style={ styles.menu.menuItem }><IconFont type="icon-tag-manage"/>标签管理</Menu.Item>
                     <Menu.Item key="admin/users" style={ styles.menu.menuItem }><IconFont type="icon-user-manage"/>用户管理</Menu.Item>
                     <SubMenu title={<span><IconFont type="icon-comment-manage" />评论管理</span>} style={ styles.menu.submenu }>
-                        <Menu.Item key="admin/comments" style={ styles.menu.menuItem }><IconFont type="icon-comment-manage"/>所有评论</Menu.Item>
-                        <Menu.Item key="admin/baccomments" style={ styles.menu.menuItem }><IconFont type="icon-comment-manage"/>被举报评论</Menu.Item>
+                        <Menu.Item key="admin/comments" style={ styles.menu.menuItem }><IconFont type="icon-pinglun"/>所有评论</Menu.Item>
+                        <Menu.Item key="admin/baccomments" style={ styles.menu.menuItem }><IconFont type="icon-jubao"/>被举报评论</Menu.Item>
                     </SubMenu>
                 </Menu>
             </div>

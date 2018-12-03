@@ -12,6 +12,8 @@ import Article from './main/page/article';
 import Articles from './main/page/articles';
 import Notes from './main/page/notes';
 
+import Comment from './main/components/comment';
+
 ReactDOM.render(
     <Provider store={ store }>
         <Router history={ history }>
@@ -21,6 +23,8 @@ ReactDOM.render(
                     <Route exact path={`/index`} component={ Home }/>
                     <Route exact path={`/articles/:type?`} component={ Articles }/>
                     <Route exact path={`/notes`} component={ Notes }/>
+
+                    <Route exact path={`/comment`} component={ Comment }/>
 
                     <Route exact path={`/:type/:id?`} render={ (props) => {
                         let type = props.match.params.type;

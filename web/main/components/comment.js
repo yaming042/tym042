@@ -1,12 +1,57 @@
 import React from 'react';
 import { message, Button } from 'antd';
 
+const comments = [
+    {
+        id: 'abcccc',
+        user: '1111',
+        origin: '2222',
+        created_at: '2018-05-08 20:02:33',
+        content: '小米你不行雅，点击放大了空间哦i尽快递交了空间；跌幅接近发',
+        children: [],
+    },
+    {
+        id: 'bcccccc',
+        user: '3333',
+        origin: '44444',
+        created_at: '2018-08-08 20:02:33',
+        content: '小击放大了空间哦i大幅度积分卡九分九七二九幅度萨芬近发',
+        children: [
+            {
+                id: '5555',
+                user: '5555',
+                origin: '66666',
+                created_at: '2018-05-08 20:02:33',
+                content: '小米你不行雅，点击放大了空间哦i尽快递交了空间；跌幅接近发',
+                children: [],
+            },
+            {
+                id: 'beeeee',
+                user: '777',
+                origin: '888888',
+                created_at: '2018-05-08 20:02:33',
+                content: '小米你不行雅，点击放大了空间哦i尽快递交了空间；跌幅接近发',
+                children: [
+                    {
+                        id: 'efdfdfd',
+                        user: '9999',
+                        origin: '00000',
+                        created_at: '2018-05-08 20:02:33',
+                        content: '小米你不行雅，点击放大了空间哦i尽快递交了空间；跌幅接近发',
+                        children: [],
+                    }
+                ],
+            },
+        ],
+    },
+];
+
 export default class Comments extends React.Component{
     constructor(props){
         super(props);
 
         this.state = {
-            comments: [],
+            comments: comments || [],
             aid: props.aid || 'test',
 
             commentError: '',
@@ -29,7 +74,7 @@ export default class Comments extends React.Component{
     }
     componentWillMount(){
         setTimeout(() => {
-            this.getCommentList(this.state.aid);
+            // this.getCommentList(this.state.aid);
         });
     }
 
@@ -268,6 +313,30 @@ export default class Comments extends React.Component{
         return (/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(email));
     }
 
+
+    //测试函数
+    renderTest(menu, child=''){
+
+        let node = menu.map((dd, kk) => {
+
+            return (
+                <div key={kk} className={ child ? 'child-item' : '' }>
+                    <div>{dd.user}回复{dd.origin}</div>
+                    <div>{dd.created_at}</div>
+                    <div>{dd.content}</div>
+                    {
+                        dd.children && dd.children.length ?
+                            this.renderTest(dd.children)
+                            :
+                            null
+                    }
+                </div>
+            );
+        });
+
+        return node;
+    }
+
     render(){
         return (
             <div className="comment-container">
@@ -333,7 +402,7 @@ export default class Comments extends React.Component{
                 <button id="submit" className="submit" onClick={ this.sendComment.bind(this) }>发表</button>
 
                 <div className="comments-list">
-                    { this.renderList(this.state.comments) }
+                    { this.renderTest(this.state.comments) }
                     {
                         !this.state.comments.length ?
                             <p className="empty-tips">还没有评论喔，赶紧来坐个沙发吧</p>
