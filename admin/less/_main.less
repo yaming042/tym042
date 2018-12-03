@@ -7,20 +7,215 @@
   padding: 20px;
   overflow: hidden;
 
-  .articles-box{
+  .container-box{
     position: relative;
     width: 100%;
     height:100%;
 
-    .list-scroll-box{
+    .add-edit-option{
+      margin: 15px auto;
+    }
 
+    &.articles-box{
+      .list-box{
+        top: 47px;
+
+        .list-scroll-box{}
+      }
+    }
+
+    &.drafts-box{
+      .list-box{
+        top: 0;
+      }
+    }
+
+    &.media-box{
+      .add-edit-option{
+        margin: 15px auto 35px;
+      }
+
+      .list-box{
+        top: 67px;
+
+        .list-scroll-box{
+          top: 0;
+        }
+      }
+
+      .media-list{
+        .media-item{
+          float: left;
+          width: 19%;
+          height: 100px;
+          margin: 0 1% 10px 0;
+          background: #efefef;
+        }
+      }
+    }
+
+    &.category-box{
+      .list-box{
+        top: 0;
+      }
+
+      .add-category-box{
+        float: left;
+        width: 34%;
+        position: relative;
+        height: 100%;
+
+        .input-field{
+          flex-direction: column;
+
+          & > label{
+            width: 100%;
+            margin-right: 0;
+            text-align: left;
+          }
+
+          .input-box{
+            width: 100%;
+          }
+        }
+      }
+
+      .list-category-box{
+        float: left;
+        width: 62%;
+        padding-left: 20px;
+        position: relative;
+        height: 100%;
+        border-left: 1px solid #efefef;
+
+        .list-head{
+          .col-a{width: 20%;}
+          .col-b{width: 40%;}
+          .col-c{width: 20%;}
+          .col-d{width: 20%;}
+        }
+
+        .list-scroll-box{
+          left: 20px;
+
+          .list-body{
+            .list-item{
+              .col-a{width: 20%;}
+              .col-b{width: 40%;padding-right: 10px;}
+              .col-c{width: 20%;}
+              .col-d{width: 20%;}
+            }
+          }
+        }
+      }
+    }
+
+    &.users-box{
+      .add-edit-option{
+        margin: 15px auto 35px;
+      }
+
+      .list-box{
+        top: 67px;
+
+        .list-head{
+          .col-a{width: 30%;}
+          .col-b{width: 30%;}
+          .col-c{width: 30%;}
+          .col-d{width: 10%;}
+        }
+
+        .list-scroll-box{
+          top: 50px;
+
+          .list-body{
+            .list-item{
+              .col-a{width: 30%;}
+              .col-b{width: 30%;}
+              .col-c{width: 30%;}
+              .col-d{width: 10%;}
+            }
+          }
+        }
+      }
+    }
+
+    &.comments-box{
+      .list-box{
+
+        .list-head{
+          .col-a{width: 15%;}
+          .col-b{width: 48%;}
+          .col-c{width: 15%;}
+          .col-d{width: 18%;}
+          .col-e{width: 4%;text-align: center}
+        }
+
+        .list-scroll-box{
+          top: 50px;
+
+          .list-body{
+            .list-item{
+              .col-a{width: 15%;}
+              .col-b{width: 48%;padding-right: 10px;}
+              .col-c{width: 15%;}
+              .col-d{width: 18%;padding-right: 4px;}
+              .col-e{width: 4%;text-align: center}
+            }
+          }
+        }
+      }
+    }
+
+    .input-field{
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+
+      & > label{
+        display: inline-block;
+        width: 80px;
+        margin-right: 20px;
+        text-align: right;
+      }
+
+      .input-box{
+        display: flex;
+        flex-grow: 1;
+
+        .custom_input{
+          top: 5px;
+          width: 85%;
+
+          input::-webkit-input-placeholder
+          {
+            color: #ccc;
+            font-size: 12px;
+          }
+
+          input:-moz-placeholder,
+          input::-moz-placeholder,
+          input:-ms-input-placeholder{
+            color: #ccc;
+          }
+        }
+
+        &.input-right-box{
+          min-height: 46px;
+          align-items: center;
+          padding-right: 15%;
+        }
+      }
     }
   }
+
+
+
 
   .list-box{
     position: absolute;
     overflow: hidden;
-    top: 32px;
+    top: 0px;
     bottom: 0;
     left: 0;
     right: 0;
@@ -64,10 +259,12 @@
         .list-item{
           position: relative;
           display: flex;
-          align-items: center;
+          //align-items: center;
           border-top: 1px solid #efefef;
-          height: 40px;
-          padding: 0 4px;
+          //height: 40px;
+          //padding: 0 4px;
+          min-height: 40px;
+          padding: 12px 4px;
 
           &>div{
             position: relative;

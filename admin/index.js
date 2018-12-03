@@ -11,7 +11,11 @@ import history from './libs/history';
 import Base from './base';
 import Articles from './main/page/articles';
 import Drafts from './main/page/drafts';
-import Article from './main/page/article';
+import Media from './main/page/media';
+import Category from './main/page/category';
+import Tags from './main/page/tags';
+import Users from './main/page/users';
+import Comments from './main/page/comments';
 
 ReactDOM.render(
     <Provider store={ store }>
@@ -24,7 +28,11 @@ ReactDOM.render(
                         }}/>
                         <Route exact path={'/admin/articles'} component={ Articles }/>
                         <Route exact path={'/admin/drafts'} component={ Drafts }/>
-                        <Route exact path={'/admin/article/:id'} component={ Article }/>
+                        <Route exact path={'/admin/media'} component={ Media }/>
+                        <Route exact path={'/admin/category'} component={ Category }/>
+                        <Route exact path={'/admin/tags'} component={ Tags }/>
+                        <Route exact path={'/admin/users'} component={ Users }/>
+                        <Route exact path={'/admin/comments'} component={ Comments }/>
 
                         <Route component={ Articles }/>
                     </Switch>

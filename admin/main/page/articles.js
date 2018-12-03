@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, Menu, Dropdown, Modal } from 'antd';
 import { IconFont } from '../components/IconFont';
 
-import Article from './article';
+import Article from './sub/article';
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -116,7 +116,7 @@ class Articles extends React.Component{
     render(){
 
         return (
-            <div className="articles-box">
+            <div className="container-box articles-box">
                 <div className="add-edit-option">
                     <Button type="primary" onClick={ this.createNewArticle.bind(this) }>发布文章</Button>
                 </div>
@@ -153,6 +153,7 @@ class Articles extends React.Component{
                                             <div className="col-f">
                                                 <Dropdown
                                                     trigger={['click']}
+                                                    placement="bottomRight"
                                                     overlay={
                                                         <Menu>
                                                             <Menu.Item key="edit" style={ styles.list.optionMenuItem } onClick={this.view.bind(this, d.id)}>

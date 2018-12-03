@@ -173,15 +173,199 @@ sub {
   padding: 20px;
   overflow: hidden;
 }
-.main-content .articles-box {
+.main-content .container-box {
   position: relative;
   width: 100%;
   height: 100%;
 }
+.main-content .container-box .add-edit-option {
+  margin: 15px auto;
+}
+.main-content .container-box.articles-box .list-box {
+  top: 47px;
+}
+.main-content .container-box.drafts-box .list-box {
+  top: 0;
+}
+.main-content .container-box.media-box .add-edit-option {
+  margin: 15px auto 35px;
+}
+.main-content .container-box.media-box .list-box {
+  top: 67px;
+}
+.main-content .container-box.media-box .list-box .list-scroll-box {
+  top: 0;
+}
+.main-content .container-box.media-box .media-list .media-item {
+  float: left;
+  width: 19%;
+  height: 100px;
+  margin: 0 1% 10px 0;
+  background: #efefef;
+}
+.main-content .container-box.category-box .list-box {
+  top: 0;
+}
+.main-content .container-box.category-box .add-category-box {
+  float: left;
+  width: 34%;
+  position: relative;
+  height: 100%;
+}
+.main-content .container-box.category-box .add-category-box .input-field {
+  flex-direction: column;
+}
+.main-content .container-box.category-box .add-category-box .input-field > label {
+  width: 100%;
+  margin-right: 0;
+  text-align: left;
+}
+.main-content .container-box.category-box .add-category-box .input-field .input-box {
+  width: 100%;
+}
+.main-content .container-box.category-box .list-category-box {
+  float: left;
+  width: 62%;
+  padding-left: 20px;
+  position: relative;
+  height: 100%;
+  border-left: 1px solid #efefef;
+}
+.main-content .container-box.category-box .list-category-box .list-head .col-a {
+  width: 20%;
+}
+.main-content .container-box.category-box .list-category-box .list-head .col-b {
+  width: 40%;
+}
+.main-content .container-box.category-box .list-category-box .list-head .col-c {
+  width: 20%;
+}
+.main-content .container-box.category-box .list-category-box .list-head .col-d {
+  width: 20%;
+}
+.main-content .container-box.category-box .list-category-box .list-scroll-box {
+  left: 20px;
+}
+.main-content .container-box.category-box .list-category-box .list-scroll-box .list-body .list-item .col-a {
+  width: 20%;
+}
+.main-content .container-box.category-box .list-category-box .list-scroll-box .list-body .list-item .col-b {
+  width: 40%;
+  padding-right: 10px;
+}
+.main-content .container-box.category-box .list-category-box .list-scroll-box .list-body .list-item .col-c {
+  width: 20%;
+}
+.main-content .container-box.category-box .list-category-box .list-scroll-box .list-body .list-item .col-d {
+  width: 20%;
+}
+.main-content .container-box.users-box .add-edit-option {
+  margin: 15px auto 35px;
+}
+.main-content .container-box.users-box .list-box {
+  top: 67px;
+}
+.main-content .container-box.users-box .list-box .list-head .col-a {
+  width: 30%;
+}
+.main-content .container-box.users-box .list-box .list-head .col-b {
+  width: 30%;
+}
+.main-content .container-box.users-box .list-box .list-head .col-c {
+  width: 30%;
+}
+.main-content .container-box.users-box .list-box .list-head .col-d {
+  width: 10%;
+}
+.main-content .container-box.users-box .list-box .list-scroll-box {
+  top: 50px;
+}
+.main-content .container-box.users-box .list-box .list-scroll-box .list-body .list-item .col-a {
+  width: 30%;
+}
+.main-content .container-box.users-box .list-box .list-scroll-box .list-body .list-item .col-b {
+  width: 30%;
+}
+.main-content .container-box.users-box .list-box .list-scroll-box .list-body .list-item .col-c {
+  width: 30%;
+}
+.main-content .container-box.users-box .list-box .list-scroll-box .list-body .list-item .col-d {
+  width: 10%;
+}
+.main-content .container-box.comments-box .list-box .list-head .col-a {
+  width: 15%;
+}
+.main-content .container-box.comments-box .list-box .list-head .col-b {
+  width: 48%;
+}
+.main-content .container-box.comments-box .list-box .list-head .col-c {
+  width: 15%;
+}
+.main-content .container-box.comments-box .list-box .list-head .col-d {
+  width: 18%;
+}
+.main-content .container-box.comments-box .list-box .list-head .col-e {
+  width: 4%;
+  text-align: center;
+}
+.main-content .container-box.comments-box .list-box .list-scroll-box {
+  top: 50px;
+}
+.main-content .container-box.comments-box .list-box .list-scroll-box .list-body .list-item .col-a {
+  width: 15%;
+}
+.main-content .container-box.comments-box .list-box .list-scroll-box .list-body .list-item .col-b {
+  width: 48%;
+  padding-right: 10px;
+}
+.main-content .container-box.comments-box .list-box .list-scroll-box .list-body .list-item .col-c {
+  width: 15%;
+}
+.main-content .container-box.comments-box .list-box .list-scroll-box .list-body .list-item .col-d {
+  width: 18%;
+  padding-right: 4px;
+}
+.main-content .container-box.comments-box .list-box .list-scroll-box .list-body .list-item .col-e {
+  width: 4%;
+  text-align: center;
+}
+.main-content .container-box .input-field {
+  display: flex;
+  align-items: center;
+  margin: 15px 0;
+}
+.main-content .container-box .input-field > label {
+  display: inline-block;
+  width: 80px;
+  margin-right: 20px;
+  text-align: right;
+}
+.main-content .container-box .input-field .input-box {
+  display: flex;
+  flex-grow: 1;
+}
+.main-content .container-box .input-field .input-box .custom_input {
+  top: 5px;
+  width: 85%;
+}
+.main-content .container-box .input-field .input-box .custom_input input::-webkit-input-placeholder {
+  color: #ccc;
+  font-size: 12px;
+}
+.main-content .container-box .input-field .input-box .custom_input input:-moz-placeholder,
+.main-content .container-box .input-field .input-box .custom_input input::-moz-placeholder,
+.main-content .container-box .input-field .input-box .custom_input input:-ms-input-placeholder {
+  color: #ccc;
+}
+.main-content .container-box .input-field .input-box.input-right-box {
+  min-height: 46px;
+  align-items: center;
+  padding-right: 15%;
+}
 .main-content .list-box {
   position: absolute;
   overflow: hidden;
-  top: 32px;
+  top: 0px;
   bottom: 0;
   left: 0;
   right: 0;
@@ -236,10 +420,9 @@ sub {
 .main-content .list-box .list-scroll-box .list-body .list-item {
   position: relative;
   display: flex;
-  align-items: center;
   border-top: 1px solid #efefef;
-  height: 40px;
-  padding: 0 4px;
+  min-height: 40px;
+  padding: 12px 4px;
 }
 .main-content .list-box .list-scroll-box .list-body .list-item > div {
   position: relative;
@@ -356,6 +539,13 @@ sub {
 .ant-drawer-body {
   padding: 0 !important;
   height: 100% !important;
+}
+.ant-menu-sub.ant-menu-inline {
+  background: #F5F5F5;
+}
+.ant-menu-inline .ant-menu-item,
+.ant-menu-inline .ant-menu-submenu-title {
+  width: 100%;
 }
 .article-edit-box {
   width: 100%;

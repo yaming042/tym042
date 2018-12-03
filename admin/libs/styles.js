@@ -8,6 +8,9 @@ const styles = {
             border: 'none',
         },
         menuItem: {
+            // fontSize: '12px',
+        },
+        submenu: {
             fontSize: '12px',
         }
     },

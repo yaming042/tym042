@@ -4,31 +4,145 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as Actions from '../../actions';
 
-import _ from 'underscore';
+import { Button, Menu, Dropdown, Modal } from 'antd';
+import { IconFont } from '../components/IconFont';
 
-import Pagination from '../components/pagination';
+import styles from '../../libs/styles';
 
 class Drafts extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-
+            drafts: [],
         };
     }
 
     componentWillMount(){
 
     }
+    componentWillMount(){
+        //获取列表数据todo...
 
+        this.setState({
+            drafts: [
+                {
+                    id: '1',
+                    title: '测试测试标题1',
+                    category: [
+                        {catid: '1',catname:'分类1',slug:'category1'},
+                        {catid: '2',catname:'分类2',slug:'category2'},
+                        {catid: '3',catname:'分类3',slug:'category3'},
+                    ],
+                    tags: [
+                        {tagid: '1',tagname:'Tag1',slug:'tag1'},
+                        {tagid: '2',tagname:'Tag2',slug:'tag2'},
+                        {tagid: '3',tagname:'Tag3',slug:'tag3'},
+                    ],
+                    author: 'test1',
+                    updated_at: '2018-09-08 11:09:22',
+                },
+                {
+                    id: '2',
+                    title: '测试测试标题2',
+                    category: [
+                        {catid: '1',catname:'分类1',slug:'category1'},
+                        {catid: '2',catname:'分类2',slug:'category2'},
+                    ],
+                    tags: [
+                        {tagid: '1',tagname:'Tag1',slug:'tag1'},
+                        {tagid: '2',tagname:'Tag2',slug:'tag2'},
+                    ],
+                    author: 'test2',
+                    updated_at: '2018-09-08 11:09:22',
+                },
+                {
+                    id: '3',
+                    title: '测试测试标题3',
+                    category: [
+                        {catid: '2',catname:'分类2',slug:'category2'},
+                        {catid: '3',catname:'分类3',slug:'category3'},
+                    ],
+                    tags: [
+                        {tagid: '2',tagname:'Tag2',slug:'tag2'},
+                        {tagid: '3',tagname:'Tag3',slug:'tag3'},
+                    ],
+                    author: 'test3',
+                    updated_at: '2018-09-08 11:09:22',
+                },
+            ],
+        });
+    }
     componentWillReceiveProps(nextProps){
 
     }
 
+    view(){}
+    delete(){}
+
     render(){
 
         return (
-            <div>
-                drafts
+            <div className="container-box drafts-box">
+                <div className="list-box">
+                    <div className="list-head">
+                        <div className="col-a">标题</div>
+                        <div className="col-b">作者</div>
+                        <div className="col-c">分类</div>
+                        <div className="col-d">标签</div>
+                        <div className="col-e">日期</div>
+                        <div className="col-f">操作</div>
+                    </div>
+                    <div className="list-scroll-box">
+                        <div className="list-body">
+
+                            {
+                                this.state.drafts.map((d, k) => {
+                                    let cats = '';
+                                    let tags = '';
+                                    d.category.map((c, ck) => {
+                                        cats += ','+c.catname;
+                                    });
+                                    d.tags.map((c, ck) => {
+                                        tags += ','+c.tagname;
+                                    });
+                                    return (
+                                        <div className="list-item" key={ d.id }>
+                                            <div className="col-a">{ d.title }</div>
+                                            <div className="col-b">{ d.author }</div>
+                                            <div className="col-c">{ cats.substr(1) }</div>
+                                            <div className="col-d">{ tags.substr(1) }</div>
+                                            <div className="col-e">{ d.updated_at }</div>
+                                            <div className="col-f">
+                                                <Dropdown
+                                                    trigger={['click']}
+                                                    overlay={
+                                                        <Menu>
+                                                            <Menu.Item key="edit" style={ styles.list.optionMenuItem } onClick={this.view.bind(this, d.id)}>
+                                                                <IconFont type="icon-edit"/>
+                                                                编辑
+                                                            </Menu.Item>
+                                                            <Menu.Item key="delete" style={ styles.list.optionMenuItem } onClick={this.delete.bind(this, d.id)}>
+                                                                <IconFont type="icon-delete"/>
+                                                                删除
+                                                            </Menu.Item>
+                                                        </Menu>
+                                                    }
+                                                >
+                                                    <Button shape="circle" style={ styles.list.optionBtn }>
+                                                        <IconFont type="icon-show-more" style={{fontSize:'16px'}}/>
+                                                    </Button>
+                                                </Dropdown>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            }
+
+
+                        </div>
+                    </div>
+
+                </div>
             </div>
         );
     }
