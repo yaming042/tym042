@@ -39,6 +39,14 @@ const comments = [
                         created_at: '2018-05-08 20:02:33',
                         content: '小米你不行雅，点击放大了空间哦i尽快递交了空间；跌幅接近发',
                         children: [],
+                    },
+                    {
+                        id: 'adfefdfde',
+                        user: 'dfdfdfd',
+                        origin: 'aaaaaaaa',
+                        created_at: '2018-05-08 20:02:33',
+                        content: '小米你e打发打发打发打发官方大哥大阿打发父亲打是非得失发打发打发而且范德萨发啊了空间哦i尽快递交了空间；跌幅接近发',
+                        children: [],
                     }
                 ],
             },
@@ -63,15 +71,10 @@ export default class Comments extends React.Component{
         };
     }
 
-    snackbarOpen(msg){
+    messageOpen(msg){
         message.info(msg);
     }
-    snackbarClose(){
-        this.setState({
-            snackbar: false,
-            snackbarText: '',
-        });
-    }
+
     componentWillMount(){
         setTimeout(() => {
             // this.getCommentList(this.state.aid);
@@ -92,11 +95,11 @@ export default class Comments extends React.Component{
                         comments: res.data || [],
                     });
                 }else{
-                    _this.snackbarOpen('获取评论列表失败，请稍后重试!'+res.msg);
+                    _this.messageOpen('获取评论列表失败，请稍后重试!'+res.msg);
                 }
             },
             error: function(){
-                _this.snackbarOpen('获取评论列表失败，请稍后重试');
+                _this.messageOpen('获取评论列表失败，请稍后重试');
             }
         });
     }
@@ -117,10 +120,10 @@ export default class Comments extends React.Component{
             comment = $("#comment").val();
 
             if(!comment.length){
-                _this.snackbarOpen('请填写您的评论');
+                _this.messageOpen('请填写您的评论');
                 return;
             }else if(comment.length > 320){
-                _this.snackbarOpen('评论应限制在 320 个字以内');
+                _this.messageOpen('评论应限制在 320 个字以内');
                 return;
             }
 
@@ -137,10 +140,10 @@ export default class Comments extends React.Component{
             comment = $("textarea[reply-id='"+id+"']").val();
 
             if(!comment.length){
-                _this.snackbarOpen('请填写您的评论');
+                _this.messageOpen('请填写您的评论');
                 return;
             }else if(comment.length > 320){
-                _this.snackbarOpen('评论应限制在 320 个字以内');
+                _this.messageOpen('评论应限制在 320 个字以内');
                 return;
             }
 
@@ -154,7 +157,7 @@ export default class Comments extends React.Component{
             };
             successMsg = '回复';
         }else{
-            _this.snackbarOpen('参数错误');
+            _this.messageOpen('参数错误');
             return;
         }
 
@@ -168,100 +171,17 @@ export default class Comments extends React.Component{
             success: function(res){
                 console.log(res);
                 if(res.code == '200'){
-                    _this.snackbarOpen(`${successMsg}成功`);
+                    _this.messageOpen(`${successMsg}成功`);
                     _this.resetComment();
                     _this.getCommentList(_this.state.aid);
                 }else{
-                    _this.snackbarOpen(`${successMsg}失败，${res.msg}`);
+                    _this.messageOpen(`${successMsg}失败，${res.msg}`);
                 }
             },
             error: function(){
-                _this.snackbarOpen(`${successMsg}失败，请稍后重试`);
+                _this.messageOpen(`${successMsg}失败，请稍后重试`);
             }
         });
-    }
-
-    renderList(data, child=''){
-        let { comments } = this.state;
-
-        data = data.map((data, key) => {
-            let name = data.pid ?
-                    (<p className="comment-user">
-                        <span className="cname">{ data.cname }</span>
-                        &nbsp;回复&nbsp;
-                        <span className="cname">{ data.rname }</span>
-                    </p>)
-                :
-                    (<p className="comment-user">
-                        <span className="cname">{ data.cname }</span>
-                    </p>);
-
-            return (
-                <div className={`comment-item ${child ? 'comment-item-child' : ''}`} comment-id={ data.cid } key={key+'_'+data.cid}>
-                    { name }
-                    <p className="comment-content">{ data.comment }</p>
-                    <div className="comment-option">
-                        <span>{ data.created_at }</span>
-                        <span
-                            className="option reply"
-                            onClick={ () => {
-                                data.openRely = !data.openRely;
-                                this.setState({
-                                    comments: comments,
-                                });
-                            }}
-                        >回复</span>
-                        {/*<span className="option like">赞</span>*/}
-                        {/*<span className="option report">举报</span>*/}
-                    </div>
-                    {
-                        data.openRely ?
-                            <div className="reply-box">
-                                <textarea
-                                    reply-id={ data.pid ? data.pid : data.cid }
-                                    className="reply-content"
-                                    onBlur={(e) => {
-                                        let value = e.target.value;
-                                        if(!value.length || value.length > 320){
-                                            $(e.target).css('border-color', 'red');
-                                        }
-                                    }}
-                                    onFocus={(e) => {
-                                        $(e.target).css('border-color', '#1595f0');
-                                    }}
-                                ></textarea>
-                                <div className="reply-button">
-                                    <button
-                                        className="reply-cancle"
-                                        onClick={ () => {
-                                            data.openRely = !data.openRely;
-                                            this.setState({
-                                                comments: comments,
-                                            });
-                                        }}
-                                    >取消</button>
-                                    <button
-                                        data-id={ data.cid }
-                                        className="reply-submit"
-                                        onClick={ this.sendComment.bind(this, data.pid ? data.pid : data.cid, data.cname) }
-                                    >回复</button>
-                                </div>
-                            </div>
-                        :
-                            null
-                    }
-
-                    {
-                        data.children && data.children.length > 0 ?
-                            this.renderList(data.children, 'child')
-                        :
-                            null
-                    }
-                </div>
-            );
-        })
-
-        return data;
     }
 
     commentFocus(e){
@@ -315,19 +235,69 @@ export default class Comments extends React.Component{
 
 
     //测试函数
-    renderTest(menu, child=''){
+    renderList(menu, child=''){
+        let { comments } = this.state;
 
         let node = menu.map((dd, kk) => {
+            let hasChild = dd.children && dd.children.length ? true : false;
 
             return (
-                <div key={kk} className={ child ? 'child-item' : '' }>
-                    <div>{dd.user}回复{dd.origin}</div>
-                    <div>{dd.created_at}</div>
-                    <div>{dd.content}</div>
+                <div key={kk} className={`comment-item ${child ? 'comment-item-child' : ''}`}>
+                    <div className="comment-user"><span className="cname">{dd.user}</span>{dd.origin ? '回复' : ''}{dd.origin ? <span className="cname">{dd.origin}</span> : ''}</div>
+                    <div className="comment-content">{dd.content}</div>
+                    <div className="comment-option">
+                        <span>{ dd.created_at }</span>
+                        <span
+                            className="option reply"
+                            onClick={ () => {
+                                dd.openRely = !dd.openRely;
+                                this.setState({
+                                    comments: comments,
+                                });
+                            }}
+                        >回复</span>
+                        {/*<span className="option like">赞</span>*/}
+                        {/*<span className="option report">举报</span>*/}
+                    </div>
+                    {
+                        dd.openRely ?
+                            <div className="reply-box">
+                                <textarea
+                                    className="reply-content"
+                                    onBlur={(e) => {
+                                        let value = e.target.value;
+                                        if(!value.length || value.length > 320){
+                                            $(e.target).css('border-color', 'red');
+                                        }
+                                    }}
+                                    onFocus={(e) => {
+                                        $(e.target).css('border-color', '#1595f0');
+                                    }}
+                                ></textarea>
+                                <div className="reply-button">
+                                    <button
+                                        className="reply-cancle"
+                                        onClick={ () => {
+                                            dd.openRely = !dd.openRely;
+                                            this.setState({
+                                                comments: comments,
+                                            });
+                                        }}
+                                    >取消</button>
+                                    <button
+                                        className="reply-submit"
+                                        onClick={ this.sendComment.bind(this) }
+                                    >回复</button>
+                                </div>
+                            </div>
+                            :
+                            null
+                    }
+
                     {
                         dd.children && dd.children.length ?
-                            this.renderTest(dd.children)
-                            :
+                            this.renderList(dd.children, 'child')
+                        :
                             null
                     }
                 </div>
@@ -351,7 +321,7 @@ export default class Comments extends React.Component{
                             onBlur={(e)=>{
                                 let value = e.target.value;
                                 if(value.length > 16){
-                                    this.snackbarOpen('昵称过长，最多 16 个字，请修改');
+                                    this.messageOpen('昵称过长，最多 16 个字，请修改');
                                     value = value.substr(0, 13)+'...';
                                 }
                                 this.setState({
@@ -373,7 +343,7 @@ export default class Comments extends React.Component{
                                         let value = e.target.value;
                                         if(value.length){
                                             if(!this._isEmail(value)){
-                                                this.snackbarOpen('请填写正确的邮箱地址');
+                                                this.messageOpen('请填写正确的邮箱地址');
                                             }else{
                                                 this.setState({
                                                     email: value,
@@ -402,7 +372,7 @@ export default class Comments extends React.Component{
                 <button id="submit" className="submit" onClick={ this.sendComment.bind(this) }>发表</button>
 
                 <div className="comments-list">
-                    { this.renderTest(this.state.comments) }
+                    { this.renderList(this.state.comments) }
                     {
                         !this.state.comments.length ?
                             <p className="empty-tips">还没有评论喔，赶紧来坐个沙发吧</p>
