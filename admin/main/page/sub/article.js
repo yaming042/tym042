@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Drawer, Form, Button, Col, Row, Input, Select, Divider, Radio } from 'antd';
+import { Drawer, Form, Button, Col, Row, Input, Select, Divider, Radio, message } from 'antd';
 const { Option } = Select;
 
 import TextField from '../../components/InputField';
@@ -21,10 +21,19 @@ class Article extends React.Component{
         this.state = {
             id: props.id,
             open: props.open,
-            type: '',
+
             editor: null,
 
             thumbs: [],
+            tags: [],
+            category: [],
+            type: '',
+            author: '',
+            abstract: '',
+            title: '',
+            content: '',
+
+            errors: {},
         };
     }
 
@@ -32,22 +41,33 @@ class Article extends React.Component{
         this.setState({
             open: true,
         }, ()=>{
-            this.initWangEditor();
+            if(!this.state.editor){
+                this.initWangEditor();
+            }
         });
     }
     drawerClose(){
         this.setState({
             open: false,
+            thumbs: [],
+            tags: [],
+            category: [],
+            type: '',
+            author: '',
+            abstract: '',
+            title: '',
+            content: '',
+
+            errors: {},
         }, ()=>{
             this.props.handleClose && this.props.handleClose();
         });
+
     }
-    componentWillMount(){
-        let t = setTimeout(() => {
-            clearTimeout(t);
-            this.getArticleInfo( this.state.id );
-        });
+    messageOpen(msg){
+        message.info(msg);
     }
+
     componentDidMount(){
         if(!window.hasOwnProperty('wangEditor')){
             func.createScript('/public/js/wangEditor.min.js', () => {
@@ -71,11 +91,17 @@ class Article extends React.Component{
         if(id == 'new'){
             this.resetData();
             return ;
+        }else{
+            //获取文章信息，并填充内容
         }
+
+    }
+    setEditor(){
 
     }
 
     initWangEditor(){
+        let _this = this;
         if(this.state.editor){
             return;
         }
@@ -104,8 +130,10 @@ class Article extends React.Component{
             $(".placehold").hide();
         }
         editor.customConfig.onchange = function (html) {
-            console.log(html);
-        }
+            _this.setState({
+                content: html,
+            });
+        };
 
         editor.create();
 
@@ -120,10 +148,15 @@ class Article extends React.Component{
         });
     }
     selectCategory(v, e){
-        console.log(v, e);
+        console.log(v);
+        this.setState({
+            category: v,
+        });
     }
     selectTag(v, e){
-        console.log(v, e);
+        this.setState({
+            tags: v,
+        });
     }
 
     getThumb(data){
@@ -133,6 +166,24 @@ class Article extends React.Component{
     }
 
     save(status){
+        if(!this.validateSubmit()){
+            this.errorMsgShow();
+            return;
+        }
+
+        let data = {
+            thumbs: this.state.thumbs.slice(0),
+            tags: this.state.tags.slice(0),
+            category: this.state.category.slice(0),
+            type: this.state.type,
+            author: this.state.author,
+            abstract: this.state.abstract,
+            title: this.state.title,
+            content: this.state.content,
+        };
+
+        console.log(data);
+
         if(status == 'draft'){
             console.log('save as draft');
         }else if(status == 'publish'){
@@ -140,7 +191,167 @@ class Article extends React.Component{
         }
     }
     resetData(){
+        this.setState({
+            thumbs: [],
+            tags: [],
+            category: [],
+            type: '',
+            author: '',
+            abstract: '',
+            title: '',
+            content: '',
 
+            errors: {},
+        });
+    }
+
+    validateSubmit(){
+        let errors = this.state.errors;
+        $("#title").focus().blur();
+        $("#abstract").focus().blur();
+        $("#author").focus().blur();
+
+        if(!this.state.type){
+            errors.typeErr = '请选择文章类型';
+        }else{
+            if(errors.typeErr){
+                delete errors.typeErr;
+            }
+        }
+
+        if(!this.state.category || !this.state.category.length){
+            errors.categoryErr = '请选择文章分类';
+        }else{
+            if(errors.categoryErr){
+                delete errors.categoryErr;
+            }
+        }
+
+        if(!this.state.tags || !this.state.tags.length){
+            errors.tagErr = '请选择文章标签';
+        }else{
+            if(errors.tagErr){
+                delete errors.tagErr;
+            }
+        }
+
+        if(!this.state.content.length || this.state.content == '<p><br></p>'){
+            errors.contentErr = '请完成文章内容的输入';
+        }else{
+            if(errors.contentErr){
+                delete errors.contentErr;
+            }
+        }
+
+        if(this.state.type == '2' && !this.state.thumbs.length){
+            errors.thumbsErr = '请上传文章缩略图';
+        }else{
+            if(errors.thumbsErr){
+                delete errors.thumbsErr;
+            }
+        }
+
+        this.setState({
+            errors: errors,
+        });
+        if(Object.keys(errors).length){
+            return false;
+        }
+
+        return true;
+    }
+
+    inputBlur(id, e){
+        let errors = this.state.errors;
+        let value = e.target.value;
+        let msg = '';
+
+        switch(id){
+            case 'title':
+                if(!value.length){
+                    msg = '文章标题不能为空';
+                }else if(value.length > 60){
+                    msg = '文章标题最多60字';
+                }
+
+                if(msg){
+                    errors.titleErr = msg;
+                }else{
+                    delete errors.titleErr;
+                }
+
+                break;
+            case 'abstract':
+                if(!value.length){
+                    msg = '文章摘要不能为空';
+                }else if(value.length > 60){
+                    msg = '文章摘要最多320字';
+                }
+
+                if(msg){
+                    errors.abstractErr = msg;
+                }else{
+                    delete errors.abstractErr;
+                }
+
+                break;
+            case 'author':
+                if(value.length > 60){
+                    msg = '作者名称最多60字';
+                }
+
+                if(msg){
+                    errors.authorErr = msg;
+                }else{
+                    delete errors.authorErr;
+                }
+
+                break;
+            default:
+                break;
+        }
+
+        this.setState({
+            errors: errors,
+        });
+
+    }
+    inputFocus(id, e){
+        let errors = this.state.errors;
+
+        switch(id){
+            case 'title':
+                errors.titleErr = '';
+                break;
+            case 'abstract':
+                errors.abstractErr = '';
+                break;
+            case 'author':
+                errors.authorErr = '';
+                break;
+            default:
+                break;
+        }
+
+        this.setState({
+            errors: errors,
+        });
+    }
+    errorMsgShow(){
+        let errors = this.state.errors;
+        if(errors.titleErr || errors.abstractErr || errors.authorErr){
+            return;
+        }else if(errors.typeErr){
+            this.messageOpen( errors.typeErr );
+        }else if(errors.categoryErr){
+            this.messageOpen( errors.categoryErr );
+        }else if(errors.tagErr){
+            this.messageOpen( errors.tagErr );
+        }else if(errors.contentErr){
+            this.messageOpen( errors.contentErr );
+        }else if(errors.thumbsErr){
+            this.messageOpen( errors.thumbsErr );
+        }
     }
 
     render(){
@@ -183,6 +394,11 @@ class Article extends React.Component{
                                     <TextField
                                         id="title"
                                         placeholder={`请输入文章标题`}
+                                        defaultValue={ this.state.title }
+                                        error={ this.state.errors.titleErr }
+                                        onBlur={ this.inputBlur.bind(this, 'title') }
+                                        onFocus={ this.inputFocus.bind(this, 'title') }
+                                        onChange={(e) => {this.setState({title: e.target.value});}}
                                     />
                                 </div>
                             </div>
@@ -190,8 +406,13 @@ class Article extends React.Component{
                                 <label>文章摘要</label>
                                 <div className="input-box">
                                     <TextField
-                                        id="title"
+                                        id="abstract"
                                         placeholder={`请输入文章摘要`}
+                                        defaultValue={ this.state.abstract }
+                                        error={ this.state.errors.abstractErr }
+                                        onBlur={ this.inputBlur.bind(this, 'abstract') }
+                                        onFocus={ this.inputFocus.bind(this, 'abstract') }
+                                        onChange={(e) => {this.setState({abstract: e.target.value});}}
                                     />
                                 </div>
                             </div>
@@ -199,8 +420,13 @@ class Article extends React.Component{
                                 <label>文章作者</label>
                                 <div className="input-box">
                                     <TextField
-                                        id="title"
+                                        id="author"
                                         placeholder={`请输入文章作者`}
+                                        defaultValue={ this.state.author }
+                                        error={ this.state.errors.authorErr }
+                                        onBlur={ this.inputBlur.bind(this, 'author') }
+                                        onFocus={ this.inputFocus.bind(this, 'author') }
+                                        onChange={(e) => {this.setState({author: e.target.value});}}
                                     />
                                 </div>
                             </div>
@@ -221,7 +447,7 @@ class Article extends React.Component{
                                 <label>文章分类</label>
                                 <div className="input-box input-right-box">
                                     <Select
-                                        defaultValue="1"
+                                        defaultValue={ this.state.category }
                                         style={ styles.form.select }
                                         onChange={ this.selectCategory.bind(this) }
                                     >
@@ -236,7 +462,7 @@ class Article extends React.Component{
                                 <label>文章标签</label>
                                 <div className="input-box input-right-box">
                                     <Select
-                                        defaultValue={[]}
+                                        defaultValue={ this.state.tags }
                                         style={ styles.form.select }
                                         mode="multiple"
                                         maxTagCount={6}
