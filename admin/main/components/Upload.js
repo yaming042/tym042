@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
-import { message, Button, Progress, Modal } from 'antd';
-import { IconFont } from '../components/IconFont';
+import Dialog from 'material-ui/Dialog';
+import Snackbar from 'material-ui/Snackbar';
+import IconButton from 'material-ui/IconButton';
 
 import styles from '../../libs/styles';
 
@@ -32,8 +33,24 @@ export default class UploadOne extends Component{
 
             previewVisible: false,//是否打开图片预览
             previewImage: '',//预览图片的地址
+
+            snackbar: false,
+            snackbarText: '',
         };
 
+    }
+
+    snackbarOpen(msg){
+        this.setState({
+            snackbar: true,
+            snackbarText: msg,
+        });
+    }
+    snackbarClose(){
+        this.setState({
+            snackbar: false,
+            snackbarText: '',
+        });
     }
 
     componentDidMount(){
@@ -58,7 +75,6 @@ export default class UploadOne extends Component{
             flash_swf_url: `/public/libs/Moxie.swf`,
             silverlight_xap_url: `/public/libs/Moxie.xap`,
             url: `http://localhost:8888/api/upload`,
-            headers: {'X-CSRF-TOKEN': 'abc','_token':'cba'},
             resize: {
                 quality: 100,
             },
@@ -117,14 +133,14 @@ export default class UploadOne extends Component{
                 },
                 Error: function (up, err) {
                     if(err.code == -600){
-                        _this.messageOpen(`图片大小不能超过 ${this.props.limit || '1M'}`);
+                        _this.snackbarOpen(`图片大小不能超过 ${this.props.limit || '1M'}`);
                     }else if (err.code == -601){
-                        _this.messageOpen(`请选择正确格式的图片 ( ${this.props.suffix || 'jpg, jpeg, gif, png, bmp'} )`);
+                        _this.snackbarOpen(`请选择正确格式的图片 ( ${this.props.suffix || 'jpg, jpeg, gif, png, bmp'} )`);
                     }else if(err.code == -602){
-                        _this.messageOpen('请勿上传重复的文件');
+                        _this.snackbarOpen('请勿上传重复的文件');
                     }else{
                         console.log(err);
-                        _this.messageOpen('Error xml: ' + err);
+                        _this.snackbarOpen('Error xml: ' + err);
                     }
                 }
             }
@@ -139,10 +155,6 @@ export default class UploadOne extends Component{
         });
     }
 
-    messageOpen(msg){
-        message.warning( msg );
-    }
-
     showPreview(index){
         let urls = this.state.url.slice(0);
         let curImage = urls[index];
@@ -152,7 +164,7 @@ export default class UploadOne extends Component{
             previewVisible: true,
         });
     }
-    closeModel(){
+    closePreview(){
         this.setState({
             previewImage: '',
             previewVisible: false,
@@ -223,16 +235,24 @@ export default class UploadOne extends Component{
 
                 </div>
 
-                <Modal
-                    visible={ this.state.previewVisible }
-                    footer={ null }
-                    closable={ false }
-                    centered={ true }
-                    style={{maxWidth:'1000px'}}
+                <Dialog
+                    open={ this.state.previewVisible }
+                    modal={ true }
                 >
-                    <IconFont type="icon-close" onClick={ this.closeModel.bind(this) } style={ styles.modal.closeBtn } />
+                    <IconButton
+                        iconClassName="iconfont icon-close"
+                        style={ styles.modal.closeBtn }
+                        onClick={ this.closePreview.bind(this) }
+                    />
                     <img alt="Preview Image" style={{ width: '100%' }} src={ this.state.previewImage } />
-                </Modal>
+                </Dialog>
+
+                <Snackbar
+                    open={ this.state.snackbar }
+                    message={ this.state.snackbarText }
+                    autoHideDuration={ 3000 }
+                    onRequestClose={this.snackbarClose.bind(this) }
+                />
             </div>
         );
     }
