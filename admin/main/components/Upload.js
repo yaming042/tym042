@@ -99,7 +99,7 @@ export default class UploadOne extends Component{
                 UploadProgress: function (up, file) {
                     let btnId = _this.state.id;
 
-                    // $('#file-name-'+btnId).text(file.name);
+                    $('#file-name-'+btnId).text(file.percent + '%');
                     $('#file-progress-'+btnId).css('width',file.percent + '%');//控制进度条
                 },
                 FileUploaded: function (up, file, info) {
@@ -126,10 +126,11 @@ export default class UploadOne extends Component{
                     _this.setState({
                         showProgress: false,
                     }, () => {
+                        $('#file-name-'+btnId).text('');
                         $('#file-progress-'+btnId).css('width','0');//控制进度条恢复原始状态
                     });
 
-                    this.props.collect && this.props.collect(urls);
+                    _this.props.collect && _this.props.collect(urls);
                 },
                 Error: function (up, err) {
                     if(err.code == -600){
@@ -225,7 +226,7 @@ export default class UploadOne extends Component{
                         {
                             this.state.showProgress ?
                                 <div className="upload-progress">
-                                    {/*<span id={`file-name-${uploaderId}`}></span>*/}
+                                    <span id={`file-name-${uploaderId}`}></span>
                                     <span id={`file-progress-${uploaderId}`}></span>
                                 </div>
                                 :
@@ -238,13 +239,15 @@ export default class UploadOne extends Component{
                 <Dialog
                     open={ this.state.previewVisible }
                     modal={ true }
+                    bodyStyle={{textAlign:'center'}}
                 >
                     <IconButton
                         iconClassName="iconfont icon-close"
-                        style={ styles.modal.closeBtn }
+                        style={ styles.button.dialogClose }
+                        iconStyle={{fontSize:'14px'}}
                         onClick={ this.closePreview.bind(this) }
                     />
-                    <img alt="Preview Image" style={{ width: '100%' }} src={ this.state.previewImage } />
+                    <img alt="Preview Image" src={ this.state.previewImage } />
                 </Dialog>
 
                 <Snackbar

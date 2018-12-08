@@ -1,9 +1,12 @@
 import React from 'react';
 
-import { Drawer, Form, Button, Col, Row, Input, Select, Divider, Radio, message } from 'antd';
-const { Option } = Select;
+import Drawer from 'material-ui/Drawer';
+import TextField from 'material-ui/TextField';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import Divider from 'material-ui/Divider';
 
-import TextField from '../../components/InputField';
 import UploadFiles from '../../components/Upload';
 
 import { bindActionCreators } from 'redux'
@@ -12,21 +15,75 @@ import { connect } from 'react-redux'
 import * as Actions from '../../../actions/index';
 import * as func from '../../../libs/functions';
 import styles from '../../../libs/styles';
+import * as Events from '../../../libs/events';
 
-const RadioGroup = Radio.Group;
+const categorys = [
+    {
+        id: '1',
+        slug: 'category1',
+        name: '分类 1',
+    },
+    {
+        id: '2',
+        slug: 'category2',
+        name: '分类 2',
+    },
+    {
+        id: '3',
+        slug: 'category3',
+        name: '分类 3',
+    },
+    {
+        id: '4',
+        slug: 'category4',
+        name: '分类 4',
+    },
+    {
+        id: '5',
+        slug: 'category5',
+        name: '分类 5',
+    },
+];
+const tags = [
+    {
+        id: '1',
+        slug: 'tag1',
+        name: '标签 1',
+    },
+    {
+        id: '2',
+        slug: 'tag2',
+        name: '标签 2',
+    },
+    {
+        id: '3',
+        slug: 'tag3',
+        name: '标签 3',
+    },
+    {
+        id: '4',
+        slug: 'tag4',
+        name: '标签 4',
+    },
+    {
+        id: '5',
+        slug: 'tag5',
+        name: '标签 5',
+    },
+];
 
 class Article extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            id: props.id,
-            open: props.open,
+            open: false,
 
             editor: null,
 
             thumbs: [],
             tags: [],
-            category: [],
+            tagsLabel: [],
+            category: "",
             type: '',
             author: '',
             abstract: '',
@@ -59,8 +116,6 @@ class Article extends React.Component{
             content: '',
 
             errors: {},
-        }, ()=>{
-            this.props.handleClose && this.props.handleClose();
         });
 
     }
@@ -74,6 +129,11 @@ class Article extends React.Component{
                 console.log('insert wangEditor success');
             });
         }
+
+        Events.emiter.on(Events.OPEN_ARTICLE_EDIT, (id) => {
+            this.drawerOpen();
+            this.getArticleInfo(id);
+        });
     }
     componentWillReceiveProps(nextProps){
         if(nextProps.open){
@@ -85,6 +145,8 @@ class Article extends React.Component{
         this.setState({
             editor: null,
         });
+
+        Events.emiter.removeAllListeners(Events.OPEN_ARTICLE_EDIT);
     }
 
     getArticleInfo(id){
@@ -147,15 +209,35 @@ class Article extends React.Component{
             type: e.target.value,
         });
     }
-    selectCategory(v, e){
-        console.log(v);
+    selectCategory(e, key, v){
         this.setState({
             category: v,
         });
     }
-    selectTag(v, e){
+    selectTag(e, key, v){
+        let tagsLabel = this.state.tagsLabel.slice(0);
+        tagsLabel.push(e.target.innerHTML);
         this.setState({
             tags: v,
+            tagsLabel: tagsLabel,
+        });
+    }
+    selectionRenderer(values){
+        if(values.length){
+            return `已经选择 ${values.length} 个标签`;
+        }
+        return;
+    }
+    removeTag(id){
+        let tags = this.state.tags.slice(0);
+        let tagsLabel = this.state.tagsLabel.slice(0);
+
+        let index = tags.indexOf(id);
+        tags.splice(index, 1);
+        tagsLabel.splice(index, 1);
+        this.setState({
+            tags: tags,
+            tagsLabel: tagsLabel,
         });
     }
 
@@ -358,18 +440,9 @@ class Article extends React.Component{
 
         return (
             <Drawer
-                title=""
+                open={ this.state.open }
                 width="100%"
-                placement="right"
-                onClose={ this.drawerClose.bind(this) }
-                maskClosable={false}
-                closable={false}
-                visible={ this.state.open }
-                style={{
-                    height: '100%',
-                    overflow: 'auto',
-                    paddingBottom: 53,
-                }}
+                onRequestChange={ this.drawerClose.bind(this) }
             >
                 <div className="article-edit-box">
                     <div className="editor-topbar">
@@ -393,9 +466,11 @@ class Article extends React.Component{
                                 <div className="input-box">
                                     <TextField
                                         id="title"
-                                        placeholder={`请输入文章标题`}
-                                        defaultValue={ this.state.title }
-                                        error={ this.state.errors.titleErr }
+                                        hintText={`请输入文章标题`}
+                                        hintStyle={ styles.selectField.hintStyle }
+                                        inputStyle={ styles.selectField.selectedLabel }
+                                        value={ this.state.title }
+                                        errorText={ this.state.errors.titleErr }
                                         onBlur={ this.inputBlur.bind(this, 'title') }
                                         onFocus={ this.inputFocus.bind(this, 'title') }
                                         onChange={(e) => {this.setState({title: e.target.value});}}
@@ -407,9 +482,11 @@ class Article extends React.Component{
                                 <div className="input-box">
                                     <TextField
                                         id="abstract"
-                                        placeholder={`请输入文章摘要`}
-                                        defaultValue={ this.state.abstract }
-                                        error={ this.state.errors.abstractErr }
+                                        hintText={`请输入文章摘要`}
+                                        hintStyle={ styles.selectField.hintStyle }
+                                        inputStyle={ styles.selectField.selectedLabel }
+                                        value={ this.state.abstract }
+                                        errorText={ this.state.errors.abstractErr }
                                         onBlur={ this.inputBlur.bind(this, 'abstract') }
                                         onFocus={ this.inputFocus.bind(this, 'abstract') }
                                         onChange={(e) => {this.setState({abstract: e.target.value});}}
@@ -421,9 +498,11 @@ class Article extends React.Component{
                                 <div className="input-box">
                                     <TextField
                                         id="author"
-                                        placeholder={`请输入文章作者`}
-                                        defaultValue={ this.state.author }
-                                        error={ this.state.errors.authorErr }
+                                        hintText={`请输入文章作者`}
+                                        hintStyle={ styles.selectField.hintStyle }
+                                        inputStyle={ styles.selectField.selectedLabel }
+                                        value={ this.state.author }
+                                        errorText={ this.state.errors.authorErr }
                                         onBlur={ this.inputBlur.bind(this, 'author') }
                                         onFocus={ this.inputFocus.bind(this, 'author') }
                                         onChange={(e) => {this.setState({author: e.target.value});}}
@@ -433,47 +512,101 @@ class Article extends React.Component{
                             <div className="input-field">
                                 <label>文章类型</label>
                                 <div className="input-box input-right-box">
-                                    <RadioGroup
-                                        onChange={ this.selectType.bind(this) }
-                                        value={ this.state.type }
+                                    <RadioButtonGroup
+                                        name='category'
+                                        style={{display:'flex'}}
+                                        valueSelected={ this.state.type }
                                     >
-                                        <Radio value='1'>博客</Radio>
-                                        <Radio value='2'>实践</Radio>
-                                        <Radio value='3'>笔记</Radio>
-                                    </RadioGroup>
+                                        <RadioButton
+                                            value="1"
+                                            label="博客"
+                                            iconStyle={ styles.button.radioButton.iconStyle }
+                                            labelStyle={ styles.button.radioButton.labelStyle }
+                                            className="radioButton"
+                                            style={ styles.button.radioButton.root }
+                                        />
+                                        <RadioButton
+                                            value="2"
+                                            label="实践"
+                                            iconStyle={ styles.button.radioButton.iconStyle }
+                                            labelStyle={ styles.button.radioButton.labelStyle }
+                                            className="radioButton"
+                                            style={ styles.button.radioButton.root }
+                                        />
+                                        <RadioButton
+                                            value="3"
+                                            label="笔记"
+                                            iconStyle={ styles.button.radioButton.iconStyle }
+                                            labelStyle={ styles.button.radioButton.labelStyle }
+                                            className="radioButton"
+                                        />
+                                    </RadioButtonGroup>
                                 </div>
                             </div>
                             <div className="input-field">
                                 <label>文章分类</label>
                                 <div className="input-box input-right-box">
-                                    <Select
-                                        defaultValue={ this.state.category }
-                                        style={ styles.form.select }
-                                        onChange={ this.selectCategory.bind(this) }
+                                    <SelectField
+                                        value={ this.state.category }
+                                        hintText="请选择文章分类"
+                                        hintStyle={ styles.selectField.hintStyle }
+                                        onChange={this.selectCategory.bind(this) }
+                                        labelStyle={ styles.selectField.selectedLabel }
                                     >
-                                        <Option value="1">Category 1</Option>
-                                        <Option value="2">Category 2</Option>
-                                        <Option value="3">Category 3</Option>
-                                        <Option value="4">Category 4</Option>
-                                    </Select>
+                                        {
+                                            categorys.map((d, k) => {
+                                                return (
+                                                    <MenuItem key={ d.id } value={ d.id } primaryText={ d.name } />
+                                                );
+                                            })
+                                        }
+                                    </SelectField>
                                 </div>
                             </div>
-                            <div className="input-field">
+                            <div className="input-field" style={{marginBottom:0}}>
                                 <label>文章标签</label>
                                 <div className="input-box input-right-box">
-                                    <Select
-                                        defaultValue={ this.state.tags }
-                                        style={ styles.form.select }
-                                        mode="multiple"
-                                        maxTagCount={6}
-                                        allowClear={true}
+                                    <SelectField
+                                        multiple={ true }
+                                        hintText="请选择文章标签"
+                                        hintStyle={ styles.selectField.hintStyle }
+                                        value={ this.state.tags }
                                         onChange={ this.selectTag.bind(this) }
+                                        selectionRenderer={this.selectionRenderer.bind(this) }
+                                        labelStyle={ styles.selectField.selectedLabel }
                                     >
-                                        <Option value="1">Tag 1</Option>
-                                        <Option value="2">Tag 2</Option>
-                                        <Option value="3">Tag 3</Option>
-                                        <Option value="4">Tag 4</Option>
-                                    </Select>
+                                        {
+                                            tags.map((d, k) => {
+                                                let checked = this.state.tags && this.state.tags.indexOf(d.slug) > -1;
+
+                                                return (
+                                                    <MenuItem
+                                                        key={ d.id }
+                                                        insetChildren={ true }
+                                                        checked={ checked }
+                                                        value={ d.slug }
+                                                        primaryText={ d.name }
+                                                    />
+                                                );
+                                            })
+                                        }
+                                    </SelectField>
+                                </div>
+                            </div>
+                            <div className="input-field" style={{marginTop:0}}>
+                                <label>&nbsp;</label>
+                                <div className="input-box input-right-box">
+                                    {
+                                        this.state.tagsLabel.map((d, k) => {
+
+                                            return (
+                                                <div key={ k } className="tag-label">
+                                                    <span>{d}</span>
+                                                    <i className="iconfont icon-delete" onClick={ this.removeTag.bind(this, d) }></i>
+                                                </div>
+                                            );
+                                        })
+                                    }
                                 </div>
                             </div>
                             <Divider />

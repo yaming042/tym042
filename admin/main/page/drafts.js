@@ -1,25 +1,99 @@
 import React from 'react';
 
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
+import Paper from 'material-ui/Paper';
+
+import Article from './sub/article';
+
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as Actions from '../../actions';
 
-import { Button, Menu, Dropdown, Modal } from 'antd';
-import { IconFont } from '../components/IconFont';
-
 import styles from '../../libs/styles';
+import history from '../../libs/history';
+import * as Events from '../../libs/events';
 
 class Drafts extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             drafts: [],
+            curArticleId: '',
+
+            drawerOpen: false,
+            dialogOpenDel: false,
         };
     }
 
-    componentWillMount(){
-
+    dialogOpenDelete(){
+        this.setState({
+            dialogOpenDel: true,
+        });
     }
+    dialogCloseDelete(){
+        this.setState({
+            dialogOpenDel: false,
+        });
+    }
+    showOptionsMenu(id, e){
+        //不要在setState的更新函数中访问event变量，会报错的
+        this.setState({
+            curArticleId: id,
+        });
+
+        this.commonMenuOpen('drafts-options-menu', e);
+    }
+    //显示操作菜单
+    commonMenuOpen(menuId, evt){
+        let node = $(evt.target);
+        let pclass = 'list-item';
+        let cClass = 'tr-bg';
+        let tClass = 'iconfont-show-more';
+
+        /*根据父节点是否有特定的类来判断是否需要打开或关闭
+         * 1:点击同一个icon
+         * 2:点击不同的icon
+         * 3:点击icon之外的节点
+         * */
+        let pnode = node.parents('.'+pclass);
+        if(pnode.hasClass(cClass)){
+            pnode.removeClass(cClass);
+            $('#'+menuId).css({'left': '0px', 'top': '-1000px', "display": 'none'});
+        }else{
+            pnode.siblings().removeClass(cClass);
+            pnode.addClass(cClass);
+            if(evt){
+                let left = evt.clientX;
+                let top = evt.clientY;
+                if(top > ($(window).height() / 5 * 4)){
+                    $('#'+menuId).css({
+                        'left': left - 10 - $('#'+menuId).width() + 'px',
+                        'top': top + 5 - $('#'+menuId).height() + 'px',
+                        'zIndex': 1501,
+                        'display': 'block'
+                    });
+                }else{
+                    $('#'+menuId).css({'left': left - 10 - $('#'+menuId).width() + 'px', 'top': top + 5 + 'px','zIndex': 1501, 'display': 'block'});
+                }
+
+                $(document).on('click.openMenu', function(e) {//用命名空间绑定函数，方便取消取消显示窗口
+                    if(!$(e.target).hasClass(tClass)){
+                        hiddenMenu(pclass, menuId);
+                    }
+                });
+            }
+
+        }
+
+        function hiddenMenu(c, menuId){
+            $('.'+c).removeClass(cClass);
+            $('#'+menuId).css({'left': '0px', 'top': '-1000px','display': 'none'});
+            $(document).unbind("click.openMenu" );
+        }
+    }
+
     componentWillMount(){
         //获取列表数据todo...
 
@@ -72,14 +146,29 @@ class Drafts extends React.Component{
             ],
         });
     }
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps){}
 
+    //编辑、预览草稿
+    view(){
+        console.log( this.state.curArticleId );
+        Events.emiter.emit(Events.OPEN_ARTICLE_EDIT);
+    }
+    //删除草稿
+    delete(){
+        this.dialogOpenDelete();
     }
 
-    view(){}
-    delete(){}
+
+    confirmDelete(){
+        console.log( this.state.curArticleId );
+        this.dialogCloseDelete();
+    }
 
     render(){
+        let actionsDelete = [
+            <FlatButton label="取消" style={ styles.button.cancel } onClick={ this.dialogCloseDelete.bind(this) } />,
+            <FlatButton label="确定" style={ styles.button.confirmDelete } onClick={ this.confirmDelete.bind(this) } />,
+        ];
 
         return (
             <div className="container-box drafts-box">
@@ -94,7 +183,6 @@ class Drafts extends React.Component{
                     </div>
                     <div className="list-scroll-box">
                         <div className="list-body">
-
                             {
                                 this.state.drafts.map((d, k) => {
                                     let cats = '';
@@ -113,25 +201,12 @@ class Drafts extends React.Component{
                                             <div className="col-d">{ tags.substr(1) }</div>
                                             <div className="col-e">{ d.updated_at }</div>
                                             <div className="col-f">
-                                                <Dropdown
-                                                    trigger={['click']}
-                                                    overlay={
-                                                        <Menu>
-                                                            <Menu.Item key="edit" style={ styles.list.optionMenuItem } onClick={this.view.bind(this, d.id)}>
-                                                                <IconFont type="icon-edit"/>
-                                                                编辑
-                                                            </Menu.Item>
-                                                            <Menu.Item key="delete" style={ styles.list.optionMenuItem } onClick={this.delete.bind(this, d.id)}>
-                                                                <IconFont type="icon-delete"/>
-                                                                删除
-                                                            </Menu.Item>
-                                                        </Menu>
-                                                    }
-                                                >
-                                                    <Button shape="circle" style={ styles.list.optionBtn }>
-                                                        <IconFont type="icon-show-more" style={{fontSize:'16px'}}/>
-                                                    </Button>
-                                                </Dropdown>
+                                                <IconButton
+                                                    className="iconfont-show-more"
+                                                    iconClassName="iconfont icon-show-more"
+                                                    iconStyle={ styles.optionMenu.icon }
+                                                    onClick={ this.showOptionsMenu.bind(this, d.id) }
+                                                />
                                             </div>
                                         </div>
                                     );
@@ -143,6 +218,31 @@ class Drafts extends React.Component{
                     </div>
 
                 </div>
+
+                {/*草稿详情页*/}
+                <Article />
+
+                <Dialog
+                    titleStyle={ styles.deleteDialog.title }
+                    contentStyle={ styles.deleteDialog.content }
+                    actions={ actionsDelete }
+                    modal={ false }
+                    open={ this.state.dialogOpenDel }
+                    onRequestClose={ this.dialogCloseDelete.bind(this) }
+                >
+                    是否确定 删除 此草稿?
+                </Dialog>
+
+                <Paper id="drafts-options-menu" className="options-menu" style={ styles.optionMenu.menu } >
+                    <div className="menu-item" onClick={ this.view.bind(this) }>
+                        <i className="iconfont icon-edit"></i>
+                        <span>编辑</span>
+                    </div>
+                    <div className="menu-item" onClick={ this.delete.bind(this) }>
+                        <i className="iconfont icon-delete"></i>
+                        <span>删除</span>
+                    </div>
+                </Paper>
             </div>
         );
     }

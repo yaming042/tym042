@@ -1,11 +1,12 @@
 import React from 'react';
 
+import FlatButton from 'material-ui/FlatButton';
+
+
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
-import { Button, Menu, Dropdown, Modal } from 'antd';
-import { IconFont } from '../components/IconFont';
 import styles from '../../libs/styles';
 
 class Media extends React.Component{
@@ -20,7 +21,10 @@ class Media extends React.Component{
         return (
             <div className="container-box media-box">
                 <div className="add-edit-option">
-                    <Button type="primary">上传资源</Button>
+                    <FlatButton
+                        label="上传资源"
+                        style={ styles.button.createButton }
+                    />
                 </div>
                 <div className="list-box">
                     <div className="list-scroll-box">

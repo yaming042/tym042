@@ -1,13 +1,12 @@
 import React from 'react';
 
-import TextField from '../components/InputField';
+import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
-import { Button, Menu, Dropdown, Modal } from 'antd';
-import { IconFont } from '../components/IconFont';
 import styles from '../../libs/styles';
 
 
@@ -29,7 +28,9 @@ class Tags extends React.Component{
                             <div className="input-box">
                                 <TextField
                                     id="tag_name"
-                                    placeholder={`请输入标签名称`}
+                                    hintText={`请输入标签名称`}
+                                    hintStyle={ styles.selectField.hintStyle }
+                                    inputStyle={ styles.selectField.selectedLabel }
                                 />
                             </div>
                         </div>
@@ -38,7 +39,9 @@ class Tags extends React.Component{
                             <div className="input-box">
                                 <TextField
                                     id="tag_slug"
-                                    placeholder={`请输入标签别名`}
+                                    hintText={`请输入标签别名`}
+                                    hintStyle={ styles.selectField.hintStyle }
+                                    inputStyle={ styles.selectField.selectedLabel }
                                 />
                             </div>
                         </div>
@@ -47,11 +50,16 @@ class Tags extends React.Component{
                             <div className="input-box">
                                 <TextField
                                     id="tag_description"
-                                    placeholder={`请输入标签描述`}
+                                    hintText={`请输入标签描述`}
+                                    hintStyle={ styles.selectField.hintStyle }
+                                    inputStyle={ styles.selectField.selectedLabel }
                                 />
                             </div>
                         </div>
-                        <Button type="primary" >增加标签</Button>
+                        <FlatButton
+                            label="增加标签"
+                            style={ styles.button.createButton }
+                        />
                     </div>
                     <div className="list-category-box">
                         <div className="list-head">

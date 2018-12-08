@@ -112,11 +112,54 @@
               color: #ccc;
             }
           }
+          .radioButton{
+            &>div>div{
+              top: 4px;
+              left: 4px;
+
+              span{
+                top: -8px !important;
+                left: -8px !important;
+              }
+            }
+          }
 
           &.input-right-box{
             min-height: 46px;
             align-items: center;
             padding-right: 15%;
+          }
+
+          .tag-label{
+            background: #E6E5E5;
+            padding: 4px 6px;
+            border-radius: 8px;
+            margin-right: 6px;
+            display: flex;
+            align-items: center;
+
+            i.iconfont{
+              display: inline-block;
+              margin-left: 4px;
+              width: 0px;
+              height: 0px;
+              transform: scale(0);
+              -webkit-transition: all .15s;
+              -moz-transition: all .15s;
+              -ms-transition: all .15s;
+              -o-transition: all .15s;
+              transition: all .15s;
+              font-size: 14px;
+              cursor: pointer;
+            }
+
+            &:hover{
+              i.iconfont{
+                width: 14px;
+                height: 14px;
+                transform: scale(1);
+              }
+            }
           }
         }
       }
@@ -148,20 +191,27 @@
                   position: absolute;
                   height: 100%;
                   z-index: 2;
+                  display: flex;
+                  padding: 0 10%;
+                  background: rgba(0,0,0,0.7);
+                  flex-direction: column;
+                  justify-content: center;
 
                   span{
                     height: 12px;
                     display: block;
 
-                    //&:first-child{
-                    //  width: 100%;
-                    //  text-align: center;
-                    //  height: 32px;
-                    //  line-height: 32px;
-                    //}
+                    &:first-child{
+                      width: 100%;
+                      text-align: center;
+                      height: 24px;
+                      color: #fff;
+                      font-size: 14px;
+                    }
                     &:last-child{
                       background: rgb(133, 208, 98);
-                      width: 100px;
+                      width: 0px;
+                      border-radius: 6px;
                     }
                   }
 

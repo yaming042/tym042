@@ -1,5 +1,5 @@
 import React from 'react';
-import { message, Button } from 'antd';
+import Snackbar from 'material-ui/Snackbar';
 
 const comments = [
     {
@@ -71,8 +71,17 @@ export default class Comments extends React.Component{
         };
     }
 
-    messageOpen(msg){
-        message.info(msg);
+    snackbarOpen(msg){
+        this.setState({
+            snackbar: true,
+            snackbarText: msg,
+        });
+    }
+    snackbarClose(){
+        this.setState({
+            snackbar: false,
+            snackbarText: '',
+        });
     }
 
     componentWillMount(){
@@ -95,11 +104,11 @@ export default class Comments extends React.Component{
                         comments: res.data || [],
                     });
                 }else{
-                    _this.messageOpen('获取评论列表失败，请稍后重试!'+res.msg);
+                    _this.snackbarOpen('获取评论列表失败，请稍后重试!'+res.msg);
                 }
             },
             error: function(){
-                _this.messageOpen('获取评论列表失败，请稍后重试');
+                _this.snackbarOpen('获取评论列表失败，请稍后重试');
             }
         });
     }
@@ -120,10 +129,10 @@ export default class Comments extends React.Component{
             comment = $("#comment").val();
 
             if(!comment.length){
-                _this.messageOpen('请填写您的评论');
+                _this.snackbarOpen('请填写您的评论');
                 return;
             }else if(comment.length > 320){
-                _this.messageOpen('评论应限制在 320 个字以内');
+                _this.snackbarOpen('评论应限制在 320 个字以内');
                 return;
             }
 
@@ -140,10 +149,10 @@ export default class Comments extends React.Component{
             comment = $("textarea[reply-id='"+id+"']").val();
 
             if(!comment.length){
-                _this.messageOpen('请填写您的评论');
+                _this.snackbarOpen('请填写您的评论');
                 return;
             }else if(comment.length > 320){
-                _this.messageOpen('评论应限制在 320 个字以内');
+                _this.snackbarOpen('评论应限制在 320 个字以内');
                 return;
             }
 
@@ -157,7 +166,7 @@ export default class Comments extends React.Component{
             };
             successMsg = '回复';
         }else{
-            _this.messageOpen('参数错误');
+            _this.snackbarOpen('参数错误');
             return;
         }
 
@@ -171,15 +180,15 @@ export default class Comments extends React.Component{
             success: function(res){
                 console.log(res);
                 if(res.code == '200'){
-                    _this.messageOpen(`${successMsg}成功`);
+                    _this.snackbarOpen(`${successMsg}成功`);
                     _this.resetComment();
                     _this.getCommentList(_this.state.aid);
                 }else{
-                    _this.messageOpen(`${successMsg}失败，${res.msg}`);
+                    _this.snackbarOpen(`${successMsg}失败，${res.msg}`);
                 }
             },
             error: function(){
-                _this.messageOpen(`${successMsg}失败，请稍后重试`);
+                _this.snackbarOpen(`${successMsg}失败，请稍后重试`);
             }
         });
     }
@@ -321,7 +330,7 @@ export default class Comments extends React.Component{
                             onBlur={(e)=>{
                                 let value = e.target.value;
                                 if(value.length > 16){
-                                    this.messageOpen('昵称过长，最多 16 个字，请修改');
+                                    this.snackbarOpen('昵称过长，最多 16 个字，请修改');
                                     value = value.substr(0, 13)+'...';
                                 }
                                 this.setState({
@@ -343,7 +352,7 @@ export default class Comments extends React.Component{
                                         let value = e.target.value;
                                         if(value.length){
                                             if(!this._isEmail(value)){
-                                                this.messageOpen('请填写正确的邮箱地址');
+                                                this.snackbarOpen('请填写正确的邮箱地址');
                                             }else{
                                                 this.setState({
                                                     email: value,
@@ -380,6 +389,13 @@ export default class Comments extends React.Component{
                             null
                     }
                 </div>
+
+                <Snackbar
+                    open={ this.state.snackbar }
+                    message={ this.state.snackbarText }
+                    autoHideDuration={ 3000 }
+                    onRequestClose={ this.snackbarClose.bind(this) }
+                />
             </div>
         );
     }

@@ -1,11 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Icon, Button } from 'antd';
+
+import IconButton from 'material-ui/IconButton';
 
 import styles from '../../libs/styles';
-
-//iconfont图标
-import { IconFont } from '../components/IconFont';
 
 export default class Topbar extends React.Component{
     constructor(props){
@@ -60,16 +58,8 @@ export default class Topbar extends React.Component{
                     TYM042
                 </div>
                 <div className="option-box">
-                    <Button
-                        shape="circle"
-                        style={ styles.topbarIcon }
-                        onClick={ this.toggleUser.bind(this) }
-                    >
-                        <IconFont
-                            type="icon-user"
-                            style={{color:'#333'}}
-                        />
-                    </Button>
+                    <IconButton iconClassName="iconfont icon-user" />
+
                     {
                         this.state.userStatus ?
                             <div className="menu-detail" ref="user_menu">
