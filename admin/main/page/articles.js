@@ -255,6 +255,34 @@ class Articles extends React.Component{
                         <span>删除</span>
                     </div>
                 </Paper>
+
+
+                <Dialog
+                    modal={false}
+                    contentStyle={{width:'900px',maxWidth:'none',height:'600px'}}
+                    bodyStyle={{padding:'0'}}
+                    open={ true }
+                    autoDetectWindowHeight={ false }
+                    bodyClassName="bodyClassName"
+                    contentClassName="contentClassName"
+                >
+                    <div className="custom-dialog-container has-tab has-header has-footer">
+                        <div className="custom-dialog-option">
+                            option
+                        </div>
+                        <div className="custom-dialog-header">
+                            header
+                        </div>
+                        <div className="custom-dialog-body">
+                            <div className="tab-container">
+
+                            </div>
+                        </div>
+                        <div className="custom-dialog-footer">
+                            footer
+                        </div>
+                    </div>
+                </Dialog>
             </div>
         );
     }
