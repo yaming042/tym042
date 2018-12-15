@@ -33,6 +33,14 @@
     &.drafts-box{
       .list-box{
         top: 0;
+
+        .list-scroll-box{
+
+          .iconfont-show-more{
+            top: -16px;
+            right: 22px;
+          }
+        }
       }
     }
 
@@ -62,37 +70,7 @@
 
     &.category-box{
       .list-box{
-        top: 0;
-      }
-
-      .add-category-box{
-        float: left;
-        width: 34%;
-        position: relative;
-        height: 100%;
-
-        .input-field{
-          flex-direction: column;
-
-          & > label{
-            width: 100%;
-            margin-right: 0;
-            text-align: left;
-          }
-
-          .input-box{
-            width: 100%;
-          }
-        }
-      }
-
-      .list-category-box{
-        float: left;
-        width: 62%;
-        padding-left: 20px;
-        position: relative;
-        height: 100%;
-        border-left: 1px solid #efefef;
+        top: 47px;
 
         .list-head{
           .col-a{width: 20%;}
@@ -103,25 +81,32 @@
         }
 
         .list-scroll-box{
-          left: 20px;
-
-          .list-body{
-            .list-item{
-              .col-a{width: 20%;}
-              .col-b{width: 40%;padding-right: 10px;}
-              .col-c{width: 20%;}
-              .col-d{width: 10%;}
-              .col-e{
+          .list-body {
+            .list-item {
+              .col-a {
+                width: 20%;
+              }
+              .col-b {
+                width: 40%;
+                padding-right: 10px;
+              }
+              .col-c {
+                width: 20%;
+              }
+              .col-d {
+                width: 10%;
+              }
+              .col-e {
                 width: 10%;
                 position: relative;
 
-                .iconfont-show-more{
+                .iconfont-show-more {
                   top: -16px;
-                  right: 0;
+                  right: 22px;
                 }
               }
 
-              &:hover{
+              &:hover {
                 background: #F2F2F2;
                 cursor: pointer;
               }

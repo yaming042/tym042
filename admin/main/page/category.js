@@ -10,7 +10,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
+import * as events from '../../libs/events';
+
 import styles from '../../libs/styles';
+
+import DialogCategory from './sub/category';
 
 class Category extends React.Component{
     constructor(props){
@@ -97,7 +101,10 @@ class Category extends React.Component{
             }
         });
     }
-    addCategroy(){
+    addCategory(){
+        events.emiter.emit(events.OPEN_CATEGORY_EDIT, '1');
+    }
+    addCategroy1(){
         if(this.checkData()){
             let data = {
                 name: this.state.name,
@@ -254,101 +261,64 @@ class Category extends React.Component{
 
         return (
             <div className="container-box category-box">
+                <div className="add-edit-option">
+                    <FlatButton
+                        label="新建分类"
+                        style={ styles.button.createButton }
+                        onClick={ this.addCategory.bind(this) }
+                    />
+                </div>
                 <div className="list-box clearfix">
-                    <div className="add-category-box">
-                        <div className="input-field">
-                            <label>分类名称</label>
-                            <div className="input-box">
-                                <TextField
-                                    id="category_name"
-                                    hintText={`请输入分类名称`}
-                                    hintStyle={ styles.selectField.hintStyle }
-                                    inputStyle={ styles.selectField.selectedLabel }
-                                    errorText={ this.state.errors.nameErr || '' }
-                                    value={ this.state.name || '' }
-                                    onFocus={ this.inputFocus.bind(this, 'category_name') }
-                                    onBlur={ this.inputBlur.bind(this, 'category_name')}
-                                    onChange={ (e) => {this.setState({name:e.target.value});} }
-                                />
-                            </div>
-                        </div>
-                        <div className="input-field">
-                            <label>分类别名</label>
-                            <div className="input-box">
-                                <TextField
-                                    id="category_slug"
-                                    hintText={`请输入分类别名`}
-                                    hintStyle={ styles.selectField.hintStyle }
-                                    inputStyle={ styles.selectField.selectedLabel }
-                                    errorText={ this.state.errors.slugErr || '' }
-                                    value={ this.state.slug || '' }
-                                    onFocus={ this.inputFocus.bind(this, 'category_slug') }
-                                    onBlur={ this.inputBlur.bind(this, 'category_slug')}
-                                    onChange={ (e) => {this.setState({slug:e.target.value});} }
-                                />
-                            </div>
-                        </div>
-                        <div className="input-field">
-                            <label>分类描述</label>
-                            <div className="input-box">
-                                <TextField
-                                    id="category_description"
-                                    hintText={`请输入分类描述`}
-                                    hintStyle={ styles.selectField.hintStyle }
-                                    inputStyle={ styles.selectField.selectedLabel }
-                                    errorText={ this.state.errors.descriptionErr || '' }
-                                    value={ this.state.description || '' }
-                                    onFocus={ this.inputFocus.bind(this, 'category_description') }
-                                    onBlur={ this.inputBlur.bind(this, 'category_description')}
-                                    onChange={ (e) => {this.setState({description:e.target.value});} }
-                                />
-                            </div>
-                        </div>
-                        <div style={{height:'20px'}}></div>
-                        <FlatButton
-                            label="增加分类"
-                            style={ styles.button.createButton }
-                            onClick={ this.addCategroy.bind(this) }
-                        />
+                    <div className="list-head">
+                        <div className="col-a">分类名称</div>
+                        <div className="col-b">分类描述</div>
+                        <div className="col-c">分类别名</div>
+                        <div className="col-d">文章总数</div>
+                        <div className="col-e">&nbsp;</div>
                     </div>
-                    <div className="list-category-box">
-                        <div className="list-head">
-                            <div className="col-a">分类名称</div>
-                            <div className="col-b">分类描述</div>
-                            <div className="col-c">分类别名</div>
-                            <div className="col-d">文章总数</div>
-                            <div className="col-e">&nbsp;</div>
-                        </div>
 
-                        <div className="list-scroll-box">
-                            <div className="list-body">
-                                {
-                                    this.state.categorys.map((d, k) => {
-                                        return (
-                                            <div className="list-item" key={ d.cid } onClick={ this.getCategory.bind(this, d.cid)}>
-                                                <div className="col-a">{ d.name }</div>
-                                                <div className="col-b">{ d.description }</div>
-                                                <div className="col-c">{ d.slug }</div>
-                                                <div className="col-d">{ d.count }</div>
-                                                <div className="col-e">
-                                                    <IconButton
-                                                        className="iconfont-show-more"
-                                                        iconClassName="iconfont icon-delete"
-                                                        iconStyle={ styles.optionMenu.icon }
-                                                        onClick={ this.delete.bind(this, d.cid) }
-                                                    />
-                                                </div>
-                                            </div>
-                                        );
-                                    })
-                                }
-                                {
-                                    this.state.categorys.length ?
-                                        null
-                                        :
-                                        <p className="nodata">没有数据</p>
-                                }
+                    <div className="list-scroll-box">
+                        <div className="list-body">
+                            <div className="list-item" onClick={ this.getCategory.bind(this, '1')}>
+                                <div className="col-a">分类名称</div>
+                                <div className="col-b">分类描述分类描述分类描述</div>
+                                <div className="col-c">分类别名</div>
+                                <div className="col-d">10</div>
+                                <div className="col-e">
+                                    <IconButton
+                                        className="iconfont-show-more"
+                                        iconClassName="iconfont icon-show-more"
+                                        iconStyle={ styles.optionMenu.icon }
+                                        onClick={ this.delete.bind(this, '1') }
+                                    />
+                                </div>
                             </div>
+                            {
+                                this.state.categorys.map((d, k) => {
+                                    return (
+                                        <div className="list-item" key={ d.cid } onClick={ this.getCategory.bind(this, d.cid)}>
+                                            <div className="col-a">{ d.name }</div>
+                                            <div className="col-b">{ d.description }</div>
+                                            <div className="col-c">{ d.slug }</div>
+                                            <div className="col-d">{ d.count }</div>
+                                            <div className="col-e">
+                                                <IconButton
+                                                    className="iconfont-show-more"
+                                                    iconClassName="iconfont icon-show-more"
+                                                    iconStyle={ styles.optionMenu.icon }
+                                                    onClick={ this.delete.bind(this, d.cid) }
+                                                />
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            }
+                            {
+                                this.state.categorys.length ?
+                                    null
+                                    :
+                                    <p className="nodata">没有数据</p>
+                            }
                         </div>
                     </div>
                 </div>
@@ -369,6 +339,8 @@ class Category extends React.Component{
                 >
                     是否确定 删除 此分类?
                 </Dialog>
+
+                <DialogCategory />
             </div>
         );
     }

@@ -103,9 +103,7 @@ class Drafts extends React.Component{
                     id: '1',
                     title: '测试测试标题1',
                     category: [
-                        {catid: '1',catname:'分类1',slug:'category1'},
-                        {catid: '2',catname:'分类2',slug:'category2'},
-                        {catid: '3',catname:'分类3',slug:'category3'},
+                        {catid: '1',catname:'分类1',slug:'category1'}
                     ],
                     tags: [
                         {tagid: '1',tagname:'Tag1',slug:'tag1'},
@@ -119,8 +117,7 @@ class Drafts extends React.Component{
                     id: '2',
                     title: '测试测试标题2',
                     category: [
-                        {catid: '1',catname:'分类1',slug:'category1'},
-                        {catid: '2',catname:'分类2',slug:'category2'},
+                        {catid: '1',catname:'分类1',slug:'category1'}
                     ],
                     tags: [
                         {tagid: '1',tagname:'Tag1',slug:'tag1'},
@@ -134,7 +131,6 @@ class Drafts extends React.Component{
                     title: '测试测试标题3',
                     category: [
                         {catid: '2',catname:'分类2',slug:'category2'},
-                        {catid: '3',catname:'分类3',slug:'category3'},
                     ],
                     tags: [
                         {tagid: '2',tagname:'Tag2',slug:'tag2'},
