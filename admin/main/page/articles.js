@@ -150,21 +150,19 @@ class Articles extends React.Component{
 
     //创建新文章
     createNewArticle(){
-        // history.push(`/admin/article/new`);
+        Events.emiter.emit(Events.OPEN_ARTICLE_EDIT, 'new');
     }
     //编辑、预览文章
     view(){
-        console.log( this.state.curArticleId );
-        Events.emiter.emit(Events.OPEN_ARTICLE_EDIT);
+        let aid = this.state.curArticleId;
+        Events.emiter.emit(Events.OPEN_ARTICLE_EDIT, aid);
     }
     //删除文章
     delete(){
         this.dialogOpenDelete();
     }
 
-
     confirmDelete(){
-        console.log( this.state.curArticleId );
         this.dialogCloseDelete();
     }
 
@@ -255,34 +253,6 @@ class Articles extends React.Component{
                         <span>删除</span>
                     </div>
                 </Paper>
-
-
-                <Dialog
-                    modal={false}
-                    contentStyle={{width:'900px',maxWidth:'none',height:'600px'}}
-                    bodyStyle={{padding:'0'}}
-                    open={ true }
-                    autoDetectWindowHeight={ false }
-                    bodyClassName="bodyClassName"
-                    contentClassName="contentClassName"
-                >
-                    <div className="custom-dialog-container has-tab has-header has-footer">
-                        <div className="custom-dialog-option">
-                            option
-                        </div>
-                        <div className="custom-dialog-header">
-                            header
-                        </div>
-                        <div className="custom-dialog-body">
-                            <div className="tab-container">
-
-                            </div>
-                        </div>
-                        <div className="custom-dialog-footer">
-                            footer
-                        </div>
-                    </div>
-                </Dialog>
             </div>
         );
     }

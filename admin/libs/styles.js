@@ -60,7 +60,7 @@ const styles = {
             color:'#fff',
             fontSize:'14px',
             marginRight:'20px',
-            backgroundColor:'rgba(74,144,226,1)',
+            backgroundColor:'#448AFF',
             boxShadow:'0px 1px 2px 0px rgba(74,74,74,0.4)',
             borderRadius:'2px',
         },

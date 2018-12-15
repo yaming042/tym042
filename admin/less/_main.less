@@ -98,7 +98,8 @@
           .col-a{width: 20%;}
           .col-b{width: 40%;}
           .col-c{width: 20%;}
-          .col-d{width: 20%;}
+          .col-d{width: 10%;}
+          .col-e{width: 10%;}
         }
 
         .list-scroll-box{
@@ -109,7 +110,21 @@
               .col-a{width: 20%;}
               .col-b{width: 40%;padding-right: 10px;}
               .col-c{width: 20%;}
-              .col-d{width: 20%;}
+              .col-d{width: 10%;}
+              .col-e{
+                width: 10%;
+                position: relative;
+
+                .iconfont-show-more{
+                  top: -16px;
+                  right: 0;
+                }
+              }
+
+              &:hover{
+                background: #F2F2F2;
+                cursor: pointer;
+              }
             }
           }
         }
@@ -296,6 +311,12 @@
   }
 
 
+  .nodata{
+    font-size: 12px;
+    color: #ccc;
+    text-align: center;
+    margin: 20px 0;
+  }
 }
 
 .options-menu{
@@ -324,4 +345,6 @@
     }
   }
 }
+
+
 

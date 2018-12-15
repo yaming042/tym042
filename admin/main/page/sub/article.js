@@ -6,6 +6,7 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
+import Snackbar from 'material-ui/Snackbar';
 
 import UploadFiles from '../../components/Upload';
 
@@ -77,6 +78,8 @@ class Article extends React.Component{
         super(props);
         this.state = {
             open: false,
+            snackbar: false,
+            snackbarText: '',
 
             editor: null,
 
@@ -108,7 +111,7 @@ class Article extends React.Component{
             open: false,
             thumbs: [],
             tags: [],
-            category: [],
+            category: '',
             type: '',
             author: '',
             abstract: '',
@@ -119,8 +122,17 @@ class Article extends React.Component{
         });
 
     }
-    messageOpen(msg){
-        message.info(msg);
+    snackbarOpen(msg){
+        this.setState({
+            snackbar: true,
+            snackbarText: msg,
+        });
+    }
+    snackbarClose(){
+        this.setState({
+            snackbar: false,
+            snackbarText: '',
+        });
     }
 
     componentDidMount(){
@@ -155,10 +167,8 @@ class Article extends React.Component{
             return ;
         }else{
             //获取文章信息，并填充内容
-        }
 
-    }
-    setEditor(){
+        }
 
     }
 
@@ -171,7 +181,16 @@ class Article extends React.Component{
         let editor = new E('#tooltop', '#editor');
 
         editor.customConfig.showLinkImg = false;
-        editor.customConfig.uploadImgShowBase64 = true;
+        editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
+        editor.customConfig.uploadImgMaxLength = 5;
+        editor.customConfig.customUploadImg = function (files, insert) {
+            files.map((d, k) => {
+                _this.uploadImg(d, (img) => {
+                    insert(img);
+                });
+            });
+        };
+
         editor.customConfig.menus = [
             'head',  // 标题
             'bold',  // 粗体
@@ -203,10 +222,32 @@ class Article extends React.Component{
             editor: editor,
         });
     }
+    uploadImg(file, cb){
+        let _this = this;
+        var fd = new FormData();
+        fd.append('file', file);
 
-    selectType(e){
+        $.ajax({
+            url: `http://localhost:8888/api/upload`,
+            type: 'post',
+            data: fd,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: (res) => {
+                if(res.code == 200){
+                    cb && cb(res.data);
+                }
+            },
+            error: (e) => {
+                _this.snackbarOpen(e.statusText);
+            }
+        });
+    }
+
+    selectType(e, v){
         this.setState({
-            type: e.target.value,
+            type: v,
         });
     }
     selectCategory(e, key, v){
@@ -254,9 +295,9 @@ class Article extends React.Component{
         }
 
         let data = {
-            thumbs: this.state.thumbs.slice(0),
+            thumbnail: this.state.thumbs.slice(0),
             tags: this.state.tags.slice(0),
-            category: this.state.category.slice(0),
+            category: this.state.category,
             type: this.state.type,
             author: this.state.author,
             abstract: this.state.abstract,
@@ -267,11 +308,38 @@ class Article extends React.Component{
         console.log(data);
 
         if(status == 'draft'){
+            data.status = 1;
             console.log('save as draft');
         }else if(status == 'publish'){
+            data.status = 2;
             console.log('save as publish');
         }
+        this.submit(data);
     }
+    submit(d){
+        let msg = d.status == 1 ? '保存' : '发布';
+
+        $.ajax({
+            url: `${_DEV}/createPost`,
+            type: 'POST',
+            data: d,
+            dataType: 'json',
+            success: (res) => {
+                console.log(res);
+                if(res.code == 200){
+                    this.snackbarOpen(`${msg}成功`);
+                    let t = setTimeout(() => {
+                        clearTimeout(t);
+                        this.drawerClose();
+                    }, 500);
+                }
+            },
+            error: (e) => {
+                this.snackbarOpen(`${msg}失败，请稍后重试`);
+            }
+        });
+    }
+
     resetData(){
         this.setState({
             thumbs: [],
@@ -286,7 +354,6 @@ class Article extends React.Component{
             errors: {},
         });
     }
-
     validateSubmit(){
         let errors = this.state.errors;
         $("#title").focus().blur();
@@ -424,15 +491,15 @@ class Article extends React.Component{
         if(errors.titleErr || errors.abstractErr || errors.authorErr){
             return;
         }else if(errors.typeErr){
-            this.messageOpen( errors.typeErr );
+            this.snackbarOpen( errors.typeErr );
         }else if(errors.categoryErr){
-            this.messageOpen( errors.categoryErr );
+            this.snackbarOpen( errors.categoryErr );
         }else if(errors.tagErr){
-            this.messageOpen( errors.tagErr );
+            this.snackbarOpen( errors.tagErr );
         }else if(errors.contentErr){
-            this.messageOpen( errors.contentErr );
+            this.snackbarOpen( errors.contentErr );
         }else if(errors.thumbsErr){
-            this.messageOpen( errors.thumbsErr );
+            this.snackbarOpen( errors.thumbsErr );
         }
     }
 
@@ -442,6 +509,7 @@ class Article extends React.Component{
             <Drawer
                 open={ this.state.open }
                 width="100%"
+                containerStyle={{overflow:'hidden'}}
                 onRequestChange={ this.drawerClose.bind(this) }
             >
                 <div className="article-edit-box">
@@ -516,6 +584,7 @@ class Article extends React.Component{
                                         name='category'
                                         style={{display:'flex'}}
                                         valueSelected={ this.state.type }
+                                        onChange={ this.selectType.bind(this) }
                                     >
                                         <RadioButton
                                             value="1"
@@ -624,8 +693,12 @@ class Article extends React.Component{
                         </div>
                     </div>
 
-
-
+                    <Snackbar
+                        open={ this.state.snackbar }
+                        message={ this.state.snackbarText }
+                        autoHideDuration={ 3000 }
+                        onRequestClose={ this.snackbarClose.bind(this) }
+                    />
                 </div>
             </Drawer>
         );
