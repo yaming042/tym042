@@ -215,40 +215,40 @@ sub {
   top: 47px;
 }
 .main-content .container-box.category-box .list-box .list-head .col-a {
-  width: 20%;
+  width: 22%;
 }
 .main-content .container-box.category-box .list-box .list-head .col-b {
   width: 40%;
 }
 .main-content .container-box.category-box .list-box .list-head .col-c {
-  width: 20%;
+  width: 22%;
 }
 .main-content .container-box.category-box .list-box .list-head .col-d {
   width: 10%;
 }
 .main-content .container-box.category-box .list-box .list-head .col-e {
-  width: 10%;
+  width: 6%;
 }
 .main-content .container-box.category-box .list-box .list-scroll-box .list-body .list-item .col-a {
-  width: 20%;
+  width: 22%;
 }
 .main-content .container-box.category-box .list-box .list-scroll-box .list-body .list-item .col-b {
   width: 40%;
   padding-right: 10px;
 }
 .main-content .container-box.category-box .list-box .list-scroll-box .list-body .list-item .col-c {
-  width: 20%;
+  width: 22%;
 }
 .main-content .container-box.category-box .list-box .list-scroll-box .list-body .list-item .col-d {
   width: 10%;
 }
 .main-content .container-box.category-box .list-box .list-scroll-box .list-body .list-item .col-e {
-  width: 10%;
+  width: 6%;
   position: relative;
 }
 .main-content .container-box.category-box .list-box .list-scroll-box .list-body .list-item .col-e .iconfont-show-more {
   top: -16px;
-  right: 22px;
+  right: -4px;
 }
 .main-content .container-box.category-box .list-box .list-scroll-box .list-body .list-item:hover {
   background: #F2F2F2;
@@ -446,6 +446,9 @@ sub {
 }
 .main-content .list-box .list-scroll-box .list-body .list-item .iconfont-show-more {
   position: absolute !important;
+}
+.main-content .list-box .list-scroll-box .list-body .list-item.tr-bg {
+  background: #f2f2f2;
 }
 .main-content .nodata {
   font-size: 12px;
@@ -840,4 +843,125 @@ sub {
 .file-upload-component .upload-button-box .upload-button span.iconfont {
   color: #757575;
   font-size: 28px;
+}
+.customDialog .customDialog-contentClassName > div {
+  height: 100%;
+}
+.customDialog .customDialog-bodyClassName {
+  height: 100%;
+}
+.customDialog .custom-dialog-container {
+  position: relative;
+  height: 100%;
+}
+.customDialog .custom-dialog-container .custom-dialog-option {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+.customDialog .custom-dialog-container .custom-dialog-header {
+  height: 0px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.customDialog .custom-dialog-container .custom-dialog-header > div {
+  display: flex;
+  align-items: center;
+}
+.customDialog .custom-dialog-container .custom-dialog-header > div i {
+  padding-right: 16px;
+  font-size: 22px;
+  color: #3986FF;
+}
+.customDialog .custom-dialog-container .custom-dialog-header > div span {
+  color: #000;
+  font-size: 18px;
+}
+.customDialog .custom-dialog-container .custom-dialog-body {
+  height: 600px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.customDialog .custom-dialog-container .custom-dialog-body .custom-dialog-body-scroll {
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  overflow-y: auto;
+}
+.customDialog .custom-dialog-container .custom-dialog-body .custom-dialog-body-scroll .add-member-option {
+  height: 30px;
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+}
+.customDialog .custom-dialog-container .custom-dialog-body .custom-dialog-body-scroll .add-member-option span.menuicon {
+  font-size: 24px;
+}
+.customDialog .custom-dialog-container .custom-dialog-footer {
+  height: 0px;
+  padding-left: 24px;
+  padding-right: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  box-shadow: 20px 20px 30px 8px rgba(0, 0, 0, 0.17);
+  border-radius: 0px 0px 4px 4px;
+  border-top: 1px solid #e6e5e5;
+}
+.customDialog .custom-dialog-container.has-header .custom-dialog-header {
+  height: 82px;
+  padding: 32px 24px 26px 24px;
+}
+.customDialog .custom-dialog-container.has-header .custom-dialog-body {
+  height: 528px;
+}
+.customDialog .custom-dialog-container.has-footer .custom-dialog-body {
+  height: 540px;
+}
+.customDialog .custom-dialog-container.has-footer .custom-dialog-footer {
+  height: 60px;
+}
+.customDialog .custom-dialog-container.has-header.has-footer .custom-dialog-header {
+  height: 82px;
+  padding: 32px 24px 26px 24px;
+}
+.customDialog .custom-dialog-container.has-header.has-footer .custom-dialog-body {
+  height: 458px;
+}
+.customDialog .custom-dialog-container.has-header.has-footer .custom-dialog-footer {
+  height: 60px;
+}
+.customDialog .input-field {
+  position: relative;
+  font-size: 14px;
+  margin: 20px 0;
+}
+.customDialog .input-field .input-label {
+  display: inline-block;
+  width: 90px;
+  margin-right: 15px;
+  vertical-align: top;
+  padding-top: 13px;
+  text-align: right;
+}
+.customDialog .input-field .input-box {
+  display: inline-block;
+  width: 320px;
+}
+.customDialog table td,
+.customDialog table th {
+  padding: 15px 7px;
+  border-bottom: 1px solid #eee;
+}
+.customDialog table td .btn-remove,
+.customDialog table th .btn-remove {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  border-radius: 100%;
+  background: #f00;
+  color: #fff;
+  cursor: pointer;
 }

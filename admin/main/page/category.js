@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Dialog from 'material-ui/Dialog';
-import TextField from 'material-ui/TextField';
+import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
@@ -9,6 +9,8 @@ import IconButton from 'material-ui/IconButton';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
+import store from '../../store';
+import * as TYPE from '../../libs/const';
 
 import * as events from '../../libs/events';
 
@@ -57,6 +59,72 @@ class Category extends React.Component{
     componentWillMount(){
         this.getCategorys();
     }
+    componentDidMount(){
+        events.emiter.on(events.UPDATE_CATEGORYS, () => {
+            this.getCategorys();
+        });
+    }
+
+    showOptionsMenu(id, e){
+        //不要在setState的更新函数中访问event变量，会报错的
+        this.setState({
+            curCategoryId: id,
+        });
+        store.dispatch({
+            type: TYPE.SET_CUR_CATEGORY_ID,
+            val: id
+        });
+
+        this.commonMenuOpen('category-options-menu', e);
+    }
+    //显示操作菜单
+    commonMenuOpen(menuId, evt){
+        let node = $(evt.target);
+        let pclass = 'list-item';
+        let cClass = 'tr-bg';
+        let tClass = 'iconfont-show-more';
+
+        /*根据父节点是否有特定的类来判断是否需要打开或关闭
+         * 1:点击同一个icon
+         * 2:点击不同的icon
+         * 3:点击icon之外的节点
+         * */
+        let pnode = node.parents('.'+pclass);
+        if(pnode.hasClass(cClass)){
+            pnode.removeClass(cClass);
+            $('#'+menuId).css({'left': '0px', 'top': '-1000px', "display": 'none'});
+        }else{
+            pnode.siblings().removeClass(cClass);
+            pnode.addClass(cClass);
+            if(evt){
+                let left = evt.clientX;
+                let top = evt.clientY;
+                if(top > ($(window).height() / 5 * 4)){
+                    $('#'+menuId).css({
+                        'left': left - 10 - $('#'+menuId).width() + 'px',
+                        'top': top + 5 - $('#'+menuId).height() + 'px',
+                        'zIndex': 1501,
+                        'display': 'block'
+                    });
+                }else{
+                    $('#'+menuId).css({'left': left - 10 - $('#'+menuId).width() + 'px', 'top': top + 5 + 'px','zIndex': 1501, 'display': 'block'});
+                }
+
+                $(document).on('click.openMenu', function(e) {//用命名空间绑定函数，方便取消取消显示窗口
+                    if(!$(e.target).hasClass(tClass)){
+                        hiddenMenu(pclass, menuId);
+                    }
+                });
+            }
+
+        }
+
+        function hiddenMenu(c, menuId){
+            $('.'+c).removeClass(cClass);
+            $('#'+menuId).css({'left': '0px', 'top': '-1000px','display': 'none'});
+            $(document).unbind("click.openMenu" );
+        }
+    }
 
     getCategorys(){
         $.ajax({
@@ -89,8 +157,13 @@ class Category extends React.Component{
             success: (res) => {
                 console.log(res);
                 if(res.code == 200){
-                    this.setState({
-                        curCategory: res.data || {},
+                    store.dispatch({
+                        type: TYPE.SET_CUR_CATEGORY,
+                        val: res.data || {}
+                    });
+                    store.dispatch({
+                        type: TYPE.SET_CUR_CATEGORY_ID,
+                        val: id
                     });
                 }else{
                     this.snackbarOpen(`获取分类数据失败，${res.msg}`);
@@ -101,49 +174,12 @@ class Category extends React.Component{
             }
         });
     }
-    addCategory(){
-        events.emiter.emit(events.OPEN_CATEGORY_EDIT, '1');
-    }
-    addCategroy1(){
-        if(this.checkData()){
-            let data = {
-                name: this.state.name,
-                slug: this.state.slug,
-                description: this.state.description,
-            };
-
-            console.log(data);
-
-            $.ajax({
-                url: `${_DEV}/addCategory`,
-                type: 'POST',
-                data: data,
-                dataType: 'json',
-                success: (res) => {
-                    if(res.code == 200){
-                        this.snackbarOpen(`创建分类成功`);
-                        this.getCategorys();
-                        let t = setTimeout(() => {
-                            clearTimeout(t);
-
-                            this.setState({
-                                name: '',
-                                slug: '',
-                                description: '',
-                                errors: {},
-                            });
-                        }, 300);
-                    }else{
-                        this.snackbarOpen(`创建分类失败，${res.msg}`);
-                    }
-                },
-                error: (e) => {
-                    this.snackbarOpen(`创建分类失败，请稍后重试`)
-                }
-            });
-        }else{
-            console.log('no pass');
+    edit(type){
+        let id = this.state.curCategoryId;
+        if(type && (type == 'new' || type == 'edit')){
+            id = type == 'new' ? '' : id;
         }
+        events.emiter.emit(events.OPEN_CATEGORY_EDIT, id);
     }
     delete(id){
         this.setState({
@@ -161,97 +197,6 @@ class Category extends React.Component{
         }, 1000);
     }
 
-    inputFocus(id){
-        let errors = this.state.errors;
-
-        switch(id){
-            case 'category_name':
-                errors.nameErr = '';
-                break;
-            case 'category_slug':
-                errors.slugErr = '';
-                break;
-            case 'category_description':
-                errors.descriptionErr = '';
-                break;
-            default:
-                break;
-        }
-
-        let t = setTimeout(() => {
-            clearTimeout(t);
-
-            this.setState({
-                errors: errors,
-            });
-        });
-    }
-    inputBlur(id, e){
-        let errors = this.state.errors;
-        let value = e.target.value;
-
-        switch(id){
-            case 'category_name':
-                if(!value.length){
-                    errors.nameErr = '分类名称不能为空';
-                }else if(value.length > 50){
-                    errors.nameErr = '分类名称最多 50 字';
-                }else{
-                    delete errors.nameErr;
-                }
-
-                break;
-            case 'category_slug':
-                if(!value.length){
-                    errors.slugErr = '分类Slug不能为空';
-                }else if(value.length > 50){
-                    errors.slugErr = '分类Slug最多 50 字';
-                }else{
-                    delete errors.slugErr;
-                }
-
-                break;
-            case 'category_description':
-                if(!value.length){
-                    errors.descriptionErr = '分类描述不能为空';
-                }else if(value.length > 320){
-                    errors.descriptionErr = '分类描述最多 320 字';
-                }else{
-                    delete errors.descriptionErr;
-                }
-
-                break;
-            default:
-                break;
-        }
-
-        let t = setTimeout(() => {
-            clearTimeout(t);
-
-            this.setState({
-                errors: errors,
-            });
-        });
-    }
-    checkData(){
-        let errors = this.state.errors;
-        $("#category_name").focus().blur();
-        $("#category_slug").focus().blur();
-        $("#category_description").focus().blur();
-
-        let name = this.state.name;
-        let slug = this.state.slug;
-        let desc = this.state.description;
-
-        console.log(this.state, name, slug, desc);
-
-        if(Object.keys(errors).length || !name || !slug || !desc){
-            return false;
-        }else{
-            return true;
-        }
-    }
-
 
     render(){
         let actionsDelete = [
@@ -265,7 +210,7 @@ class Category extends React.Component{
                     <FlatButton
                         label="新建分类"
                         style={ styles.button.createButton }
-                        onClick={ this.addCategory.bind(this) }
+                        onClick={ this.edit.bind(this, 'new') }
                     />
                 </div>
                 <div className="list-box clearfix">
@@ -279,20 +224,6 @@ class Category extends React.Component{
 
                     <div className="list-scroll-box">
                         <div className="list-body">
-                            <div className="list-item" onClick={ this.getCategory.bind(this, '1')}>
-                                <div className="col-a">分类名称</div>
-                                <div className="col-b">分类描述分类描述分类描述</div>
-                                <div className="col-c">分类别名</div>
-                                <div className="col-d">10</div>
-                                <div className="col-e">
-                                    <IconButton
-                                        className="iconfont-show-more"
-                                        iconClassName="iconfont icon-show-more"
-                                        iconStyle={ styles.optionMenu.icon }
-                                        onClick={ this.delete.bind(this, '1') }
-                                    />
-                                </div>
-                            </div>
                             {
                                 this.state.categorys.map((d, k) => {
                                     return (
@@ -306,7 +237,7 @@ class Category extends React.Component{
                                                     className="iconfont-show-more"
                                                     iconClassName="iconfont icon-show-more"
                                                     iconStyle={ styles.optionMenu.icon }
-                                                    onClick={ this.delete.bind(this, d.cid) }
+                                                    onClick={ this.showOptionsMenu.bind(this, d.cid) }
                                                 />
                                             </div>
                                         </div>
@@ -329,6 +260,17 @@ class Category extends React.Component{
                     autoHideDuration={ 3000 }
                     onRequestClose={ this.snackbarClose.bind(this) }
                 />
+
+                <Paper id="category-options-menu" className="options-menu" style={ styles.optionMenu.menu } >
+                    <div className="menu-item" onClick={ this.edit.bind(this, 'edit') }>
+                        <i className="iconfont icon-edit"></i>
+                        <span>编辑</span>
+                    </div>
+                    <div className="menu-item" onClick={ this.delete.bind(this) }>
+                        <i className="iconfont icon-delete"></i>
+                        <span>删除</span>
+                    </div>
+                </Paper>
 
                 <Dialog
                     titleStyle={ styles.deleteDialog.title }

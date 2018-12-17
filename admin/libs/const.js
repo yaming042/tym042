@@ -1,1 +1,2 @@
-export const TEST = 'TEST';
+export const SET_CUR_CATEGORY_ID = 'SET_CUR_CATEGORY_ID';
+export const SET_CUR_CATEGORY = 'SET_CUR_CATEGORY';

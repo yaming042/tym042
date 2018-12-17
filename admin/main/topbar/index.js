@@ -58,7 +58,7 @@ export default class Topbar extends React.Component{
                     TYM042
                 </div>
                 <div className="option-box">
-                    <IconButton iconClassName="iconfont icon-user" />
+                    <IconButton iconClassName="iconfont icon-user" iconStyle={{color:'#fff',fontSize:'18px'}} />
 
                     {
                         this.state.userStatus ?
