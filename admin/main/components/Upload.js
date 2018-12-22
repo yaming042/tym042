@@ -29,7 +29,8 @@ export default class UploadOne extends Component{
             uploader: null,
 
             showProgress: false,
-            showUpBtn: this.props.default && this.props.default.length ? (multi ? true : false) : true,
+            // showUpBtn: this.props.default && this.props.default.length ? (multi ? true : false) : true,
+            showUpBtn: false,
 
             previewVisible: false,//是否打开图片预览
             previewImage: '',//预览图片的地址
@@ -103,7 +104,6 @@ export default class UploadOne extends Component{
                     $('#file-progress-'+btnId).css('width',file.percent + '%');//控制进度条
                 },
                 FileUploaded: function (up, file, info) {
-                    console.log(info);
                     let res = JSON.parse( info.response );
                     let oldUrls = _this.state.url.slice(0);
                     if(res.code == 200){
@@ -140,7 +140,6 @@ export default class UploadOne extends Component{
                     }else if(err.code == -602){
                         _this.snackbarOpen('请勿上传重复的文件');
                     }else{
-                        console.log(err);
                         _this.snackbarOpen('Error xml: ' + err);
                     }
                 }
@@ -188,7 +187,9 @@ export default class UploadOne extends Component{
         let uploaderId = this.state.id;
         let disabled = this.props.disabled;
 
-        let uploadBtnStatus = disabled ? 'none' : ( this.state.showUpBtn ? 'flex' : 'none' );
+        // let uploadBtnStatus = disabled ? 'none' : ( this.state.showUpBtn ? 'flex' : 'none' );
+        let uploadBtnStatus = disabled ? 'none' : ( images.length ? (this.state.multi ? 'flex' : 'none') : 'flex' );
+
         let borderc = this.props.error ? 'red' : '#e0e0e0';
 
 

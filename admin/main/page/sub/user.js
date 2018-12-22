@@ -7,10 +7,12 @@ import IconButton from 'material-ui/IconButton';
 import Snackbar from 'material-ui/Snackbar';
 
 import styles from '../../../libs/styles';
-import * as Events from '../../../libs/events';
+import * as events from '../../../libs/events';
 import store from '../../../store';
+import * as Funcs from '../../../libs/functions';
 
-export default class Category extends React.Component{
+
+export default class User extends React.Component{
     constructor(props){
         super(props);
 
@@ -21,9 +23,9 @@ export default class Category extends React.Component{
             snackbarText: '',
 
             name: '',
-            slug: '',
-            description: '',
-            count: 0,
+            email: '',
+            pwd: '',
+            confirmpwd: '',
 
             errors: {},
         };
@@ -32,17 +34,14 @@ export default class Category extends React.Component{
         this.setState({
             open: true,
         });
-        let t = setTimeout(() => {
-            clearTimeout(t);
-            this.setData();
-        });
     }
     dialogClose(){
         this.setState({
             open: false,
             name: '',
-            slug: '',
-            description: '',
+            email: '',
+            pwd: '',
+            confirmpwd: '',
             errors: {},
         });
     }
@@ -63,20 +62,8 @@ export default class Category extends React.Component{
         this.centerDialog();
     }
     componentDidMount(){
-        Events.emiter.on(Events.OPEN_CATEGORY_EDIT, (id) => {
-            console.log(id);
+        events.emiter.on(events.OPEN_USER_EDIT, (id) => {
             this.dialogOpen();
-        });
-    }
-
-    setData(){
-        let data = store.getState().category.curCategory || {};
-
-        this.setState({
-            name: data.name || '',
-            slug: data.slug || '',
-            description: data.description || '',
-            count: data.count || 0,
         });
     }
 
@@ -84,38 +71,29 @@ export default class Category extends React.Component{
         if(this.checkData()){
             let data = {
                 name: this.state.name,
-                slug: this.state.slug,
-                description: this.state.description,
+                email: this.state.email,
+                pwd: this.state.pwd,
+                confirmpwd: this.state.confirmpwd,
             };
 
             console.log(data);
-            let url = `${_DEV}/addCategory`;
-            let method = `POST`;
-            let msg = `创建`;
-
-            if(type && type == 'update'){//更新数据
-                let cid = store.getState().category.curCategoryId;
-                url = `${_DEV}/updateCategory/${cid}`;
-                method = `PUT`;
-                msg = `更新`;
-            }
 
             $.ajax({
-                url: url,
-                type: method,
+                url: `${_DEV}/addUser`,
+                type: 'POST',
                 data: data,
                 dataType: 'json',
                 success: (res) => {
                     if(res.code == 200){
-                        this.snackbarOpen(`${msg}分类成功`);
+                        this.snackbarOpen(`新增用户成功`);
                         this.dialogClose();
-                        Events.emiter.emit(Events.UPDATE_CATEGORYS);
+                        events.emiter.emit(events.UPDATE_USERS);
                     }else{
-                        this.snackbarOpen(`${msg}分类失败，${res.msg}`);
+                        this.snackbarOpen(res.msg);
                     }
                 },
                 error: (e) => {
-                    this.snackbarOpen(`${msg}分类失败，请稍后重试`)
+                    this.snackbarOpen(`新增用户失败，请稍后重试`)
                 }
             });
         }else{
@@ -138,11 +116,14 @@ export default class Category extends React.Component{
             case 'name':
                 errors.nameErr = '';
                 break;
-            case 'slug':
-                errors.slugErr = '';
+            case 'email':
+                errors.emailErr = '';
                 break;
-            case 'description':
-                errors.descriptionErr = '';
+            case 'pwd':
+                errors.pwdErr = '';
+                break;
+            case 'confirmpwd':
+                errors.confirmpwdErr = '';
                 break;
             default:
                 break;
@@ -171,25 +152,29 @@ export default class Category extends React.Component{
                 }
 
                 break;
-            case 'slug':
-                if(!value.length){
-                    errors.slugErr = '分类别名不能为空';
-                }else if(value.length > 50){
-                    errors.slugErr = '分类别名最多 50 字';
-                }else if(this._isChinese(value)){
-                    errors.slugErr = '别名仅限 [a-z|A-Z|0-9|_]'
+            case 'email':
+                if(!Funcs._isEmail(value)){
+                    errors.emailErr = '请输入正确的邮箱地址';
                 }else{
-                    delete errors.slugErr;
+                    delete errors.emailErr;
                 }
 
                 break;
-            case 'description':
+            case 'pwd':
                 if(!value.length){
-                    errors.descriptionErr = '分类描述不能为空';
-                }else if(value.length > 320){
-                    errors.descriptionErr = '分类描述最多 320 字';
+                    errors.pwdErr = '密码不能为空';
+                }else if(value.length > 10){
+                    errors.pwdErr = '密码最多 10 位';
                 }else{
-                    delete errors.descriptionErr;
+                    delete errors.pwdErr;
+                }
+
+                break;
+            case 'confirmpwd':
+                if(value != this.state.pwd){
+                    errors.confirmpwdErr = '两次输入的密码不一样';
+                }else{
+                    delete errors.confirmpwdErr;
                 }
 
                 break;
@@ -208,29 +193,18 @@ export default class Category extends React.Component{
     checkData(){
         let errors = this.state.errors;
         $("#name").focus().blur();
-        $("#slug").focus().blur();
-        $("#description").focus().blur();
+        $("#email").focus().blur();
+        $("#pwd").focus().blur();
+        $("#confirmpwd").focus().blur();
 
-        let name = this.state.name;
-        let slug = this.state.slug;
-        let desc = this.state.description;
-
-        if(Object.keys(errors).length || !name || !slug || !desc){
+        if(Object.keys(errors).length){
             return false;
         }else{
             return true;
         }
     }
-    _isChinese(str){
-        let reg = /[\u4E00-\u9FA5]/g;
-        return reg.test(str);
-    }
-
-
 
     render(){
-        let curCategoryId = store.getState().category.curCategoryId || '';
-
         return (
             <div>
                 <Dialog
@@ -255,19 +229,19 @@ export default class Category extends React.Component{
                         <div className="custom-dialog-header">
                             <div>
                                 <i className="iconfont icon-category-manage"></i>
-                                <span>{curCategoryId && curCategoryId != 'new' ? this.state.name : '新建文章分类'}</span>
+                                <span>新增用户</span>
                             </div>
                         </div>
                         <div className="custom-dialog-body">
                             <div className="custom-dialog-body-scroll">
                                 <div className="input-field">
                                     <div className="input-label">
-                                        <label className="required">分类名称</label>
+                                        <label className="required">用户昵称</label>
                                     </div>
                                     <div className="input-box">
                                         <TextField
                                             id="name"
-                                            hintText={`请输入分类名称`}
+                                            hintText={`请输入用户昵称`}
                                             hintStyle={ styles.selectField.hintStyle }
                                             inputStyle={ styles.selectField.selectedLabel }
                                             value={ this.state.name }
@@ -280,39 +254,57 @@ export default class Category extends React.Component{
                                 </div>
                                 <div className="input-field">
                                     <div className="input-label">
-                                        <label className="required">分类别名</label>
+                                        <label className="required">用户邮箱</label>
                                     </div>
                                     <div className="input-box">
                                         <TextField
-                                            id="slug"
-                                            hintText={`请输入分类别名`}
+                                            id="email"
+                                            hintText={`请输入用户邮箱`}
                                             hintStyle={ styles.selectField.hintStyle }
                                             inputStyle={ styles.selectField.selectedLabel }
-                                            value={ this.state.slug }
-                                            errorText={ this.state.errors.slugErr }
-                                            onBlur={ this.inputBlur.bind(this, 'slug') }
-                                            onFocus={ this.inputFocus.bind(this, 'slug') }
-                                            onChange={(e) => {this.setState({slug: e.target.value});}}
+                                            value={ this.state.email }
+                                            errorText={ this.state.errors.emailErr }
+                                            onBlur={ this.inputBlur.bind(this, 'email') }
+                                            onFocus={ this.inputFocus.bind(this, 'email') }
+                                            onChange={(e) => {this.setState({email: e.target.value});}}
                                         />
                                     </div>
                                 </div>
                                 <div className="input-field">
                                     <div className="input-label">
-                                        <label>分类描述</label>
+                                        <label className="required">用户密码</label>
                                     </div>
                                     <div className="input-box">
                                         <TextField
-                                            id="description"
-                                            hintText={`请输入分类描述`}
+                                            id="pwd"
+                                            type="password"
+                                            hintText={`请输入用户密码`}
                                             hintStyle={ styles.selectField.hintStyle }
                                             inputStyle={ styles.selectField.selectedLabel }
-                                            multiLine={ true }
-                                            rowsMax={ 6 }
-                                            value={ this.state.description }
-                                            errorText={ this.state.errors.descriptionErr }
-                                            onBlur={ this.inputBlur.bind(this, 'description') }
-                                            onFocus={ this.inputFocus.bind(this, 'description') }
-                                            onChange={(e) => {this.setState({description: e.target.value});}}
+                                            value={ this.state.pwd }
+                                            errorText={ this.state.errors.pwdErr }
+                                            onBlur={ this.inputBlur.bind(this, 'pwd') }
+                                            onFocus={ this.inputFocus.bind(this, 'pwd') }
+                                            onChange={(e) => {this.setState({pwd: e.target.value});}}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="input-field">
+                                    <div className="input-label">
+                                        <label className="required">再次输入密码</label>
+                                    </div>
+                                    <div className="input-box">
+                                        <TextField
+                                            id="confirmpwd"
+                                            type="password"
+                                            hintText={`请再次输入密码`}
+                                            hintStyle={ styles.selectField.hintStyle }
+                                            inputStyle={ styles.selectField.selectedLabel }
+                                            value={ this.state.confirmpwd }
+                                            errorText={ this.state.errors.confirmpwdErr }
+                                            onBlur={ this.inputBlur.bind(this, 'confirmpwd') }
+                                            onFocus={ this.inputFocus.bind(this, 'confirmpwd') }
+                                            onChange={(e) => {this.setState({confirmpwd: e.target.value});}}
                                         />
                                     </div>
                                 </div>
@@ -324,20 +316,11 @@ export default class Category extends React.Component{
                                 style={ styles.button.cancel }
                                 onClick={ this.dialogClose.bind(this) }
                             />
-                            {
-                                curCategoryId && curCategoryId != 'new' ?
-                                    <FlatButton
-                                        label="保存"
-                                        style={ styles.button.confirm }
-                                        onClick={ this.confirm.bind(this, 'update') }
-                                    />
-                                :
-                                    <FlatButton
-                                        label="确定"
-                                        style={ styles.button.confirm }
-                                        onClick={ this.confirm.bind(this, 'save') }
-                                    />
-                            }
+                            <FlatButton
+                                label="保存"
+                                style={ styles.button.confirm }
+                                onClick={ this.confirm.bind(this) }
+                            />
                         </div>
                     </div>
                 </Dialog>

@@ -20,13 +20,60 @@
       .list-box{
         top: 47px;
 
-        .list-scroll-box{
+        .list-head{
+          .col-a{width: 18%;}
+          .col-b{width: 9%;}
+          .col-c{width: 12%;}
+          .col-d{width: 11%;}
+          .col-e{width: 18%;}
+          .col-f{width: 16%;}
+          .col-g{width: 9%;}
+          .col-h{width: 7%;}
+        }
 
-          .iconfont-show-more{
-            top: -16px;
-            right: 22px;
+        .list-scroll-box{
+          .list-body {
+            .list-item {
+              .col-a {
+                width: 18%;
+              }
+              .col-b {
+                width: 9%;
+              }
+              .col-c {
+                width: 12%;
+              }
+              .col-d {
+                width: 11%;
+              }
+              .col-e {
+                width: 18%;
+              }
+              .col-f {
+                width: 16%;
+              }
+              .col-g {
+                 width: 9%;
+               }
+              .col-h {
+                width: 7%;
+                position: relative;
+
+                .iconfont-show-more {
+                  top: -16px;
+                  right: 22px;
+                }
+
+              }
+
+              &:hover {
+                background: #F2F2F2;
+                cursor: pointer;
+              }
+            }
           }
         }
+
       }
     }
 
@@ -68,7 +115,7 @@
       }
     }
 
-    &.category-box{
+    &.category-box, &.tag-box{
       .list-box{
         top: 47px;
 
@@ -333,6 +380,13 @@
       background: #F2F2F2;
     }
   }
+}
+
+.empty-data{
+  color: #ccc;
+  font-size: 12px;
+  text-align: center;
+  margin: 25px 0;
 }
 
 

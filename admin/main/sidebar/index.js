@@ -53,11 +53,11 @@ export default class Home extends React.Component{
                     icon: < i className="iconfont icon-article-manage" style={ styles.menu.menuItem }></i>,
                     label: '文章管理',
                 },
-                {
-                    path: '/admin/drafts',
-                    icon: <i className="iconfont icon-draft-manage" style={ styles.menu.menuItem }></i>,
-                    label: '草稿管理',
-                },
+                // {
+                //     path: '/admin/drafts',
+                //     icon: <i className="iconfont icon-draft-manage" style={ styles.menu.menuItem }></i>,
+                //     label: '草稿管理',
+                // },
                 {
                     path: '/admin/media',
                     icon: <i className="iconfont icon-media-manage" style={ styles.menu.menuItem }></i>,

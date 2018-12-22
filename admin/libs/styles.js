@@ -14,7 +14,13 @@ const styles = {
         },
         innerDiv: {
             padding: '12px 0 12px 40px',
-        }
+        },
+        iconMenusList: {
+            fontSize: '12px',
+            height: '32px',
+            lineHeight: '32px',
+            minHeight: 'auto',
+        },
     },
 
     list:{
@@ -64,6 +70,9 @@ const styles = {
             boxShadow:'0px 1px 2px 0px rgba(74,74,74,0.4)',
             borderRadius:'2px',
         },
+        createButtonLabel: {
+            fontWeight: 'normal',
+        },
 
         radioButton: {
             root: {
@@ -108,6 +117,11 @@ const styles = {
             OTransition: 'all 0s',
             left: '0px',
             top: '-1000px',
+        },
+        iconMenuStyle: {
+            fontSize: '13px',
+            fontWeight: 'bold',
+            color: '#808080',
         },
     },
     selectField: {

@@ -84,4 +84,25 @@ export function getCookie(name) {
     }
 }
 
+export function _isArray(obj){
+    return Array.isArray?Array.isArray(obj):Object.prototype.toString.call(obj) === '[object Array]';
+}
+export function _isPhone(tel){
+    return ( /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(tel) );
+}
+export function _isMobile(phone){
+    return ( /^1[34578]\d{9}$/.test(phone) );
+}
+export function _isURL(url){
+    let reg = /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/;
+    return reg.test(url);
+}
+export function _isEmail(email){
+    return (/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(email));
+}
+export function _isChinese(str){
+    let reg = /[\u4E00-\u9FA5]/g;
+    return reg.test(str);
+}
+
 

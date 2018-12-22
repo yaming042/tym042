@@ -4,6 +4,7 @@ import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import CustomTheme from './libs/customTheme';
 
 import store from './store';
 import history from './libs/history';
@@ -19,7 +20,7 @@ import Users from './main/page/users';
 
 ReactDOM.render(
     <Provider store={ store }>
-        <MuiThemeProvider>
+        <MuiThemeProvider muiTheme={ CustomTheme }>
             <Router history={ history }>
                 <Base>
                     <Switch>

@@ -17,61 +17,8 @@ import * as Actions from '../../../actions/index';
 import * as func from '../../../libs/functions';
 import styles from '../../../libs/styles';
 import * as Events from '../../../libs/events';
-
-const categorys = [
-    {
-        id: '1',
-        slug: 'category1',
-        name: '分类 1',
-    },
-    {
-        id: '2',
-        slug: 'category2',
-        name: '分类 2',
-    },
-    {
-        id: '3',
-        slug: 'category3',
-        name: '分类 3',
-    },
-    {
-        id: '4',
-        slug: 'category4',
-        name: '分类 4',
-    },
-    {
-        id: '5',
-        slug: 'category5',
-        name: '分类 5',
-    },
-];
-const tags = [
-    {
-        id: '1',
-        slug: 'tag1',
-        name: '标签 1',
-    },
-    {
-        id: '2',
-        slug: 'tag2',
-        name: '标签 2',
-    },
-    {
-        id: '3',
-        slug: 'tag3',
-        name: '标签 3',
-    },
-    {
-        id: '4',
-        slug: 'tag4',
-        name: '标签 4',
-    },
-    {
-        id: '5',
-        slug: 'tag5',
-        name: '标签 5',
-    },
-];
+import * as TYPE from '../../../libs/const';
+import store from '../../../store';
 
 class Article extends React.Component{
     constructor(props){
@@ -83,15 +30,18 @@ class Article extends React.Component{
 
             editor: null,
 
+            tagsData: [],
+            categorysData: [],
             thumbs: [],
             tags: [],
-            tagsLabel: [],
             category: "",
             type: '',
             author: '',
             abstract: '',
             title: '',
             content: '',
+
+            status: '',
 
             errors: {},
         };
@@ -109,7 +59,7 @@ class Article extends React.Component{
     drawerClose(){
         this.setState({
             open: false,
-            thumbs: [],
+            thumbs: '',
             tags: [],
             category: '',
             type: '',
@@ -135,6 +85,10 @@ class Article extends React.Component{
         });
     }
 
+    componentWillMount(){
+        this.getCategorys();
+        this.getTags();
+    }
     componentDidMount(){
         if(!window.hasOwnProperty('wangEditor')){
             func.createScript('/public/js/wangEditor.min.js', () => {
@@ -144,16 +98,17 @@ class Article extends React.Component{
 
         Events.emiter.on(Events.OPEN_ARTICLE_EDIT, (id) => {
             this.drawerOpen();
-            this.getArticleInfo(id);
+            let t = setTimeout(() => {
+                clearTimeout(t);
+                this.setArticleInfo();
+            }, 300);
         });
     }
-    componentWillReceiveProps(nextProps){
-        if(nextProps.open){
-            this.drawerOpen();
-            this.getArticleInfo(nextProps.id);
-        }
-    }
     componentWillUnmount(){
+        if(this.state.editor){
+            this.state.editor.txt.clear();
+        }
+
         this.setState({
             editor: null,
         });
@@ -161,16 +116,74 @@ class Article extends React.Component{
         Events.emiter.removeAllListeners(Events.OPEN_ARTICLE_EDIT);
     }
 
-    getArticleInfo(id){
-        if(id == 'new'){
-            this.resetData();
-            return ;
-        }else{
-            //获取文章信息，并填充内容
+    getCategorys(){
+        $.ajax({
+            url: `${_DEV}/getCategorys`,
+            type: 'GET',
+            dataType: 'json',
+            success: (res) => {
+                if(res.code == 200){
+                    this.setState({
+                        categorysData: res.data || [],
+                    });
+                }else{
+                    this.snackbarOpen(`获取分类列表数据失败，${res.msg}`);
+                }
+            },
+            error: (e) => {
+                this.snackbarOpen(`获取分类列表数据失败，请稍后重试`);
+            }
+        });
+    }
+    getTags(){
+        $.ajax({
+            url: `${_DEV}/getTags`,
+            type: 'GET',
+            dataType: 'json',
+            success: (res) => {
+                if(res.code == 200){
+                    this.setState({
+                        tagsData: res.data || [],
+                    });
+                }else{
+                    this.snackbarOpen(`获取标签列表数据失败，${res.msg}`);
+                }
+            },
+            error: (e) => {
+                this.snackbarOpen(`获取标签列表数据失败，请稍后重试`);
+            }
+        });
+    }
+    setArticleInfo(){
+        let infos = store.getState().article.curArticle;
+        let tags = [];
+        (infos.tags || []).map((d, k) => {
+            tags.push(d.pivot.tid);
+        });
 
+        this.setState({
+            thumbs: infos.thumbnail ? [ infos.thumbnail ] : [],
+            tags: tags,
+            category: infos.category ? infos.category.pivot.cid : '',
+            type: infos.type+'' || '',
+            author: infos.author || '',
+            abstract: infos.excerpt || '',
+            title: infos.title || '',
+            content: infos.content || '',
+
+            errors: {},
+        });
+
+        if(!this.state.editor || !window.hasOwnProperty('wangEditor')){
+            this.initWangEditor();
         }
 
+        let t = setTimeout(() => {
+            clearTimeout(t);
+            this.state.editor.txt.html(infos.content || '');
+        });
     }
+
 
     initWangEditor(){
         let _this = this;
@@ -256,11 +269,8 @@ class Article extends React.Component{
         });
     }
     selectTag(e, key, v){
-        let tagsLabel = this.state.tagsLabel.slice(0);
-        tagsLabel.push(e.target.innerHTML);
         this.setState({
             tags: v,
-            tagsLabel: tagsLabel,
         });
     }
     selectionRenderer(values){
@@ -271,15 +281,22 @@ class Article extends React.Component{
     }
     removeTag(id){
         let tags = this.state.tags.slice(0);
-        let tagsLabel = this.state.tagsLabel.slice(0);
 
         let index = tags.indexOf(id);
         tags.splice(index, 1);
-        tagsLabel.splice(index, 1);
+
         this.setState({
             tags: tags,
-            tagsLabel: tagsLabel,
         });
+    }
+    getTagById(id){
+        let tags = this.state.tagsData.slice(0),
+            len = tags.length;
+        for(let i=0;i<len;i++){
+            if(tags[i].tid == id){
+                return tags[i];
+            }
+        }
     }
 
     getThumb(data){
@@ -294,8 +311,11 @@ class Article extends React.Component{
             return;
         }
 
+        let curId = store.getState().article.curArticleId;
+
         let data = {
-            thumbnail: this.state.thumbs.slice(0),
+            id: curId,
+            thumbnail: this.state.thumbs.length ? this.state.thumbs[0] : '',
             tags: this.state.tags.slice(0),
             category: this.state.category,
             type: this.state.type,
@@ -309,11 +329,10 @@ class Article extends React.Component{
 
         if(status == 'draft'){
             data.status = 1;
-            console.log('save as draft');
         }else if(status == 'publish'){
             data.status = 2;
-            console.log('save as publish');
         }
+
         this.submit(data);
     }
     submit(d){
@@ -325,12 +344,13 @@ class Article extends React.Component{
             data: d,
             dataType: 'json',
             success: (res) => {
-                console.log(res);
                 if(res.code == 200){
                     this.snackbarOpen(`${msg}成功`);
                     let t = setTimeout(() => {
                         clearTimeout(t);
                         this.drawerClose();
+
+                        Events.emiter.emit(Events.UPDATE_ARTICLE_LIST);
                     }, 500);
                 }
             },
@@ -524,8 +544,9 @@ class Article extends React.Component{
                     <div className="editor-article-body">
                         <div className="editor-toolbar" id="tooltop"></div>
                         <div className="article-editor">
-                            <div className="placehold">请输入内容...</div>
-                            <div id="editor"></div>
+                            <div id="editor">
+                                <div className="placehold">请输入内容...</div>
+                            </div>
                         </div>
 
                         <div className="editor-article-info">
@@ -623,9 +644,9 @@ class Article extends React.Component{
                                         labelStyle={ styles.selectField.selectedLabel }
                                     >
                                         {
-                                            categorys.map((d, k) => {
+                                            this.state.categorysData.map((d, k) => {
                                                 return (
-                                                    <MenuItem key={ d.id } value={ d.id } primaryText={ d.name } />
+                                                    <MenuItem key={ d.cid } value={ d.cid } primaryText={ d.name } />
                                                 );
                                             })
                                         }
@@ -645,15 +666,15 @@ class Article extends React.Component{
                                         labelStyle={ styles.selectField.selectedLabel }
                                     >
                                         {
-                                            tags.map((d, k) => {
-                                                let checked = this.state.tags && this.state.tags.indexOf(d.slug) > -1;
+                                            this.state.tagsData.map((d, k) => {
+                                                let checked = this.state.tags && this.state.tags.indexOf(d.tid) > -1;
 
                                                 return (
                                                     <MenuItem
-                                                        key={ d.id }
+                                                        key={ d.tid }
                                                         insetChildren={ true }
                                                         checked={ checked }
-                                                        value={ d.slug }
+                                                        value={ d.tid }
                                                         primaryText={ d.name }
                                                     />
                                                 );
@@ -666,11 +687,11 @@ class Article extends React.Component{
                                 <label>&nbsp;</label>
                                 <div className="input-box input-right-box">
                                     {
-                                        this.state.tagsLabel.map((d, k) => {
-
+                                        ( this.state.tags || [] ).map((d, k) => {
+                                            let tag = this.getTagById(d);
                                             return (
                                                 <div key={ k } className="tag-label">
-                                                    <span>{d}</span>
+                                                    <span>{tag.name}</span>
                                                     <i className="iconfont icon-delete" onClick={ this.removeTag.bind(this, d) }></i>
                                                 </div>
                                             );

@@ -10,7 +10,7 @@ import styles from '../../../libs/styles';
 import * as Events from '../../../libs/events';
 import store from '../../../store';
 
-export default class Category extends React.Component{
+export default class Tag extends React.Component{
     constructor(props){
         super(props);
 
@@ -63,19 +63,18 @@ export default class Category extends React.Component{
         this.centerDialog();
     }
     componentDidMount(){
-        Events.emiter.on(Events.OPEN_CATEGORY_EDIT, (id) => {
-            console.log(id);
+        Events.emiter.on(Events.OPEN_TAG_EDIT, (id) => {
             this.dialogOpen();
         });
     }
 
     setData(){
-        let data = store.getState().category.curCategory || {};
+        let data = store.getState().tag.curTag || {};
 
         this.setState({
             name: data.name || '',
             slug: data.slug || '',
-            description: data.description || '',
+            description: data.description,
             count: data.count || 0,
         });
     }
@@ -89,13 +88,13 @@ export default class Category extends React.Component{
             };
 
             console.log(data);
-            let url = `${_DEV}/addCategory`;
+            let url = `${_DEV}/addTag`;
             let method = `POST`;
             let msg = `创建`;
 
             if(type && type == 'update'){//更新数据
-                let cid = store.getState().category.curCategoryId;
-                url = `${_DEV}/updateCategory/${cid}`;
+                let tid = store.getState().tag.curTagId;
+                url = `${_DEV}/updateTag/${tid}`;
                 method = `PUT`;
                 msg = `更新`;
             }
@@ -107,15 +106,15 @@ export default class Category extends React.Component{
                 dataType: 'json',
                 success: (res) => {
                     if(res.code == 200){
-                        this.snackbarOpen(`${msg}分类成功`);
+                        this.snackbarOpen(`${msg}标签成功`);
                         this.dialogClose();
-                        Events.emiter.emit(Events.UPDATE_CATEGORYS);
+                        Events.emiter.emit(Events.UPDATE_TAGS);
                     }else{
-                        this.snackbarOpen(`${msg}分类失败，${res.msg}`);
+                        this.snackbarOpen(`${msg}标签失败，${res.msg}`);
                     }
                 },
                 error: (e) => {
-                    this.snackbarOpen(`${msg}分类失败，请稍后重试`)
+                    this.snackbarOpen(`${msg}标签失败，请稍后重试`)
                 }
             });
         }else{
@@ -229,7 +228,7 @@ export default class Category extends React.Component{
 
 
     render(){
-        let curCategoryId = store.getState().category.curCategoryId || '';
+        let curTagId = store.getState().tag.curTagId || '';
 
         return (
             <div>
@@ -255,19 +254,19 @@ export default class Category extends React.Component{
                         <div className="custom-dialog-header">
                             <div>
                                 <i className="iconfont icon-category-manage"></i>
-                                <span>{curCategoryId && curCategoryId != 'new' ? this.state.name : '新建文章分类'}</span>
+                                <span>{curTagId && curTagId != 'new' ? this.state.name : '新建文章标签'}</span>
                             </div>
                         </div>
                         <div className="custom-dialog-body">
                             <div className="custom-dialog-body-scroll">
                                 <div className="input-field">
                                     <div className="input-label">
-                                        <label className="required">分类名称</label>
+                                        <label className="required">标签名称</label>
                                     </div>
                                     <div className="input-box">
                                         <TextField
                                             id="name"
-                                            hintText={`请输入分类名称`}
+                                            hintText={`请输入标签名称`}
                                             hintStyle={ styles.selectField.hintStyle }
                                             inputStyle={ styles.selectField.selectedLabel }
                                             value={ this.state.name }
@@ -280,12 +279,12 @@ export default class Category extends React.Component{
                                 </div>
                                 <div className="input-field">
                                     <div className="input-label">
-                                        <label className="required">分类别名</label>
+                                        <label className="required">标签别名</label>
                                     </div>
                                     <div className="input-box">
                                         <TextField
                                             id="slug"
-                                            hintText={`请输入分类别名`}
+                                            hintText={`请输入标签别名`}
                                             hintStyle={ styles.selectField.hintStyle }
                                             inputStyle={ styles.selectField.selectedLabel }
                                             value={ this.state.slug }
@@ -298,12 +297,12 @@ export default class Category extends React.Component{
                                 </div>
                                 <div className="input-field">
                                     <div className="input-label">
-                                        <label>分类描述</label>
+                                        <label>标签描述</label>
                                     </div>
                                     <div className="input-box">
                                         <TextField
                                             id="description"
-                                            hintText={`请输入分类描述`}
+                                            hintText={`请输入标签描述`}
                                             hintStyle={ styles.selectField.hintStyle }
                                             inputStyle={ styles.selectField.selectedLabel }
                                             multiLine={ true }
@@ -325,13 +324,13 @@ export default class Category extends React.Component{
                                 onClick={ this.dialogClose.bind(this) }
                             />
                             {
-                                curCategoryId && curCategoryId != 'new' ?
+                                curTagId && curTagId != 'new' ?
                                     <FlatButton
                                         label="保存"
                                         style={ styles.button.confirm }
                                         onClick={ this.confirm.bind(this, 'update') }
                                     />
-                                :
+                                    :
                                     <FlatButton
                                         label="确定"
                                         style={ styles.button.confirm }

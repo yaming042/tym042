@@ -147,7 +147,7 @@ class Category extends React.Component{
         });
     }
     getCategory(id, e){
-        if($(e.target).hasClass('iconfont')){
+        if(e != undefined && $(e.target).hasClass('iconfont')){
             return;
         }
         $.ajax({
@@ -165,6 +165,8 @@ class Category extends React.Component{
                         type: TYPE.SET_CUR_CATEGORY_ID,
                         val: id
                     });
+
+                    events.emiter.emit(events.OPEN_CATEGORY_EDIT, id);
                 }else{
                     this.snackbarOpen(`获取分类数据失败，${res.msg}`);
                 }
@@ -176,25 +178,53 @@ class Category extends React.Component{
     }
     edit(type){
         let id = this.state.curCategoryId;
-        if(type && (type == 'new' || type == 'edit')){
+        if(type && (type == 'new')){
             id = type == 'new' ? '' : id;
+
+            store.dispatch({
+                type: TYPE.SET_CUR_CATEGORY,
+                val: {}
+            });
+            store.dispatch({
+                type: TYPE.SET_CUR_CATEGORY_ID,
+                val: id
+            });
+
+            events.emiter.emit(events.OPEN_CATEGORY_EDIT, id);
+        }else{
+            this.getCategory(id);
         }
-        events.emiter.emit(events.OPEN_CATEGORY_EDIT, id);
     }
-    delete(id){
+    delete(){
         this.setState({
-            curCategoryId: id,
             dialogOpenDel: true,
         });
     }
     deleteCategory(){
-        console.log('will delete category, id is: '+this.state.curCategoryId);
+        let id = this.state.curCategoryId;
 
-        let t = setTimeout(() => {
-            clearTimeout(t);
+        $.ajax({
+            url: `${_DEV}/deleteCategory/${id}`,
+            type: 'delete',
+            dataType: 'json',
+            success: (res) => {
+                console.log(res);
+                if(res.code == 200){
+                    this.snackbarOpen(`删除分类成功`);
+                    let t = setTimeout(() => {
+                        clearTimeout(t);
 
-            this.dialogDeleteClose();
-        }, 1000);
+                        this.dialogDeleteClose();
+                        this.getCategorys();
+                    });
+                }else{
+                    this.snackbarOpen(`删除分类失败，${res.msg}`);
+                }
+            },
+            error: (e) => {
+                this.snackbarOpen(`删除分类失败，请稍后重试`);
+            }
+        });
     }
 
 
@@ -210,6 +240,7 @@ class Category extends React.Component{
                     <FlatButton
                         label="新建分类"
                         style={ styles.button.createButton }
+                        labelStyle={ styles.button.createButtonLabel }
                         onClick={ this.edit.bind(this, 'new') }
                     />
                 </div>
