@@ -11,6 +11,7 @@ import Home from './main/home';
 import Article from './main/page/article';
 import Articles from './main/page/articles';
 import Notes from './main/page/notes';
+import Login from './login';
 
 import Comment from './main/components/comment';
 
@@ -23,6 +24,9 @@ ReactDOM.render(
                     <Route exact path={`/index`} component={ Home }/>
                     <Route exact path={`/articles/:type?`} component={ Articles }/>
                     <Route exact path={`/notes`} component={ Notes }/>
+
+                    {/*登录*/}
+                    <Route exact path={`/login`} component={ Login }/>
 
                     <Route exact path={`/comment`} component={ Comment }/>
 
